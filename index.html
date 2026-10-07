@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MilkShakers — Milkshakes, Cookies, Quiches & Cafés</title>
+<meta name="description" content="MilkShakers: a marca de milkshakes que também traz cookies, quiches e cafés. Conheça, sinta vontade e peça já.">
+ 
+<!-- ==================================================
+     FONTES (Google Fonts) + ÍCONES (Font Awesome)
+     Unbounded  -> títulos/display (personalidade jovem e geométrica)
+     Manrope    -> textos e UI
+================================================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+ 
+<style>
+/* ==================================================
+   1. TOKENS — cores, tipografia, espaçamento
+   (edite aqui para ajustar a identidade visual inteira)
+================================================== */
+:root{
+  --blue:        #0164fd;
+  --blue-dark:   #003caa;
+  --blue-deep:   #004bbd;
+  --white:       #FFFFFF;
+  --off-white:   #F4F0E7;
+  --orange:      #FF7A00;
+  --orange-dark: #E85D04;
+  --text:        #111111;
+ 
+--font-display: "Unbounded", sans-serif;
+  --font-body: "Manrope", sans-serif;
+ 
+  --radius-blob: 40% 60% 55% 45% / 45% 40% 60% 55%;
+  --container: 1180px;
+  --edge: clamp(20px, 5vw, 64px);
+ 
+  --ease: cubic-bezier(.22,.85,.3,1);
+}
+ 
+*{ box-sizing: border-box; margin:0; padding:0; }
+html{ scroll-behavior: smooth; }
+body{
+  font-family: var(--font-body);
+  color: var(--text);
+  background: var(--off-white);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img, svg{ display:block; max-width:100%; }
+a{ color: inherit; text-decoration:none; }
+ul{ list-style:none; }
+button{ font-family: inherit; cursor:pointer; border:none; background:none; }
+:focus-visible{ outline: 3px solid var(--orange); outline-offset: 3px; }
+ 
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--edge);
+}
+ 
+/* leve textura de granulado sobre as seções — sutil, não chapado */
+.grain{ position:relative; isolation:isolate; }
+.grain::after{
+  content:"";
+  position:absolute; inset:0;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity:.05;
+  mix-blend-mode: overlay;
+  pointer-events:none;
+  z-index:1;
+}
+ 
+/* ==================================================
+   2. TIPOGRAFIA
+================================================== */
+h1,h2,h3,h4{
+  font-family: var(--font-display);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  font-weight: 700;
+}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: .82rem;
+  color: var(--orange-dark);
+}
+.eyebrow .dot{
+  width:8px; height:8px; border-radius:50%;
+  background: var(--orange);
+  flex-shrink:0;
+}
+.section-title{
+  font-size: clamp(2rem, 4.2vw, 3.1rem);
+  max-width: 14ch;
+}
+.section-lede{
+  font-size: 1.05rem;
+  max-width: 46ch;
+  color: #33312c;
+}
+.section-lede.on-blue{ color: #dbe6ff; }
+ 
+/* ==================================================
+   3. BOTÕES
+   .btn-pedido = leva ao site externo de pedidos (LINK_PEDIDOS via JS)
+================================================== */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: .95rem;
+  padding: 15px 28px;
+  border-radius: 100px;
+  transition: transform .35s var(--ease), background .25s ease, color .25s ease, box-shadow .25s ease;
+  white-space: nowrap;
+}
+.btn i{ font-size: .85em; }
+.btn:hover{ transform: translateY(-3px); }
+ 
+.btn-primary{
+  background: var(--orange);
+  color: var(--white);
+  box-shadow: 0 10px 24px -10px rgba(232,93,4,.6);
+}
+.btn-primary:hover{ background: var(--orange-dark); }
+ 
+.btn-ghost-light{
+  background: transparent;
+  color: var(--white);
+  border: 1.5px solid rgba(255,255,255,.45);
+}
+.btn-ghost-light:hover{ border-color: var(--white); background: rgba(255,255,255,.08); }
+ 
+.btn-ghost-dark{
+  background: transparent;
+  color: var(--blue-deep);
+  border: 1.5px solid rgba(7,43,112,.25);
+}
+.btn-ghost-dark:hover{ border-color: var(--blue-deep); background: rgba(7,43,112,.06); }
+ 
+.btn-block{ width:100%; }
+ 
+/* ==================================================
+   4. HEADER
+================================================== */
+.site-header{
+  position: fixed;
+  top:0; left:0; right:0;
+  z-index: 500;
+  padding: 20px 0;
+  background: #004ABB;
+  transition: padding .35s var(--ease), box-shadow .35s var(--ease);
+}
+.site-header .container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 24px;
+}
+.site-header.is-scrolled{
+  padding: 12px 0;
+  box-shadow: 0 8px 30px -18px rgba(0,0,0,.5);
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--white);
+}
+.brand .brand-mark{
+  width: 34px; height:34px;
+  border-radius: var(--radius-blob);
+  background: var(--orange);
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:.9rem; flex-shrink:0;
+}
+ 
+.main-nav{ display:flex; align-items:center; gap: 34px; }
+.main-nav a{
+  font-weight: 600;
+  font-size: .92rem;
+  color: #e7edfb;
+  position:relative;
+  padding: 4px 0;
+  transition: color .3s ease;
+}
+.main-nav a::after{
+  content:"";
+  position:absolute; left:0; bottom:-2px;
+  width:0; height:2px;
+  background: var(--orange);
+  transition: width .3s var(--ease);
+}
+.main-nav a:hover::after{ width:100%; }
+ 
+.header-actions{ display:flex; align-items:center; gap:16px; }
+.header-actions .btn{ padding: 12px 22px; font-size:.88rem; }
+ 
+.nav-toggle{
+  display:none;
+  width: 42px; height:42px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.14);
+  align-items:center; justify-content:center;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.brand img {
+  width: 150px;
+  height: auto;
+  display: block;
+}
+ 
+/* ==================================================
+   5. HERO — carrossel de capas (arte fechada, com texto
+   já desenhado na imagem). Duas versões por slide:
+   desktop (Images/hero-XX-desktop.jpg) e mobile
+   (Images/hero-XX-mobile.jpg), trocadas via <picture>.
+================================================== */
+.hero{
+  position:relative;
+  padding-top: 84px; /* espaço para o cabeçalho fixo não cobrir a arte */
+  overflow:hidden;
+}
+.hero-carousel{
+  position:relative;
+  width:100%;
+  /* proporção real da arte de desktop: 1180 x 620 */
+  aspect-ratio: 1180 / 620;
+  /* nunca passa da altura da tela: desconta header (84px) + faixa marquee (~56px) */
+  max-height: calc(100vh - 84px - 56px);
+  max-height: calc(100svh - 84px - 56px);
+  min-height: 360px;
+  margin-inline: auto;
+  background: #0a5cff;
+}
+.hero-slide{
+  position:absolute;
+  inset:0;
+  display:block;
+  opacity:0;
+  z-index:1;
+  transition: opacity .9s var(--ease);
+}
+.hero-slide.is-active{
+  opacity:1;
+  z-index:2;
+}
+.hero-slide-img{
+  width:100%;
+  height:100%;
+  object-fit: contain; /* mostra a arte inteira, sem cortar */
+  object-position: center;
+  display:block;
+}
+.hero-dots{
+  position:absolute;
+  left:50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index:5;
+  display:flex;
+  gap:10px;
+}
+.hero-dot{
+  width:10px; height:10px;
+  border-radius:50%;
+  background: rgba(255,255,255,.5);
+  border: 2px solid rgba(255,255,255,.85);
+  transition: background .3s ease, transform .3s ease;
+}
+.hero-dot.is-active{
+  background: var(--orange);
+  border-color: var(--orange);
+  transform: scale(1.15);
+}
+@media (max-width: 767px){
+  .hero-carousel{
+    /* PLACEHOLDER: troque pela proporção real da sua arte mobile
+       quando ela estiver definida (ex.: 1080/1350 para 4:5) */
+    aspect-ratio: 4 / 5;
+    max-height: calc(100svh - 84px - 56px);
+    min-height: 0;
+  }
+}
+
+ 
+/* ==================================================
+   6. FAIXA / MARQUEE
+================================================== */
+.marquee-strip{
+  background: var(--blue-deep);
+  padding: 16px 0;
+  overflow:hidden;
+  border-top: 2px solid var(--orange);
+  border-bottom: 2px solid var(--orange);
+}
+.marquee-track{
+  display:flex;
+  width: max-content;
+  animation: marquee 26s linear infinite;
+  gap: 56px;
+}
+@media (prefers-reduced-motion: reduce){
+  .marquee-track{ animation-duration: 90s; }
+}
+.marquee-track span{
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #dbe6ff;
+  display:flex; align-items:center; gap:16px;
+  white-space:nowrap;
+  text-transform: none;
+}
+.marquee-track span i{ color: var(--orange); font-size:.7rem; }
+@keyframes marquee{
+  from{ transform: translateX(0); }
+  to{ transform: translateX(-50%); }
+}
+ 
+/* ==================================================
+   7. MANIFESTO / SOBRE
+================================================== */
+.manifesto{
+  padding: 110px 0;
+  position:relative;
+}
+.manifesto .container{
+  display:grid;
+  grid-template-columns: .85fr 1.15fr;
+  gap: 60px;
+  align-items:center;
+}
+.manifesto-photo{
+  position:relative;
+  aspect-ratio: 4 / 5;
+  border-radius: 28px;
+  overflow:hidden;
+  background: var(--blue-dark); /* aparece só se a foto não carregar */
+}
+.manifesto-photo-img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  object-position: center 22%;
+  display:block;
+}
+
+.manifesto-title{ color: var(--blue-deep); }
+.manifesto-body p{
+  font-size: 1.15rem;
+  color: #33312c;
+  max-width: 58ch;
+}
+.manifesto-body p + p{ margin-top: 18px; }
+.manifesto-body strong{ color: var(--blue-dark); }
+.manifesto-stats{
+  margin-top: 40px;
+  display:flex;
+  gap: 48px;
+  flex-wrap:wrap;
+}
+.stat b{
+  display:block;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--orange-dark);
+}
+.stat span{ font-size: .85rem; color:#5a584f; font-weight:600; }
+ 
+/* ==================================================
+   8. PRODUTOS
+================================================== */
+.produtos{
+  padding: 40px 0 110px;
+}
+.produtos-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap: 24px;
+  margin-bottom: 48px;
+  flex-wrap:wrap;
+}
+ 
+.cat-heading{
+  display:flex;
+  align-items:center;
+  gap: 16px;
+  margin: 0 0 26px;
+}
+.cat-heading .cat-num{
+  font-family: var(--font-display);
+  font-weight:800;
+  font-size: .82rem;
+  color: var(--white);
+  background: var(--orange);
+  width: 34px; height:34px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.cat-heading h3{ font-size: 1.5rem; color: var(--blue-deep); }
+.cat-heading p{ font-size:.9rem; color:#5a584f; font-weight:600; min-height: 2.5em; display:flex; align-items:center; }
+ 
+/* -- destaque: milkshakes (grande, protagonista) -- */
+.milkshake-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  margin-bottom: 90px;
+}
+.shake-card{
+  position:relative;
+  background: var(--blue);
+  border-radius: 28px;
+  padding: 30px 26px 26px;
+  min-height: 400px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+}
+.shake-card:hover{
+  transform: translateY(-8px);
+  box-shadow: 0 24px 48px -20px rgba(6,43,112,.55);
+}
+.shake-card:nth-child(2){ background: var(--blue-dark); }
+.shake-card:nth-child(3){ background: var(--blue-deep); }
+.shake-card::before{
+  content:"";
+  position:absolute; inset:0;
+  border-radius: inherit;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity:.06;
+  mix-blend-mode:overlay;
+}
+.shake-card .shake-icon{
+  align-self:flex-start;
+  width: 108px;
+  margin-bottom: auto;
+}
+.shake-card .shake-photo{
+  align-self:center;
+  width: min(75%, 230px);
+  margin: 0 auto auto;
+  filter: drop-shadow(0 18px 26px rgba(0,0,0,.3));
+  position:relative;
+  z-index:2;
+}
+.shake-tag{
+  position:absolute; top:22px; right:22px;
+  background: var(--orange);
+  color:#fff;
+  font-size:.72rem;
+  font-weight:700;
+  padding: 6px 12px;
+  border-radius: 100px;
+}
+.shake-card h4{
+  color:#fff;
+  font-size: 1.35rem;
+  margin-bottom: 8px;
+  position:relative; z-index:2;
+}
+.shake-card p{
+  color: #cfdcf7;
+  font-size:.92rem;
+  position:relative; z-index:2;
+}
+ 
+/* -- cookies / quiches / cafés: grade secundária -- */
+.secondary-cats{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 54px;
+}
+.small-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 16px;
+}
+.mini-card{
+  background: var(--white);
+  border: 1.5px solid rgba(7,43,112,.1);
+  border-radius: 18px;
+  padding: 18px 16px;
+  transition: border-color .3s ease, transform .3s ease;
+}
+.mini-card:hover{
+  border-color: var(--orange);
+  transform: translateY(-4px);
+}
+.mini-card i{
+  color: var(--orange);
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+  display:block;
+}
+.mini-card .mini-thumb{
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  object-fit: cover;
+  margin-bottom: 12px;
+  display:block;
+}
+.mini-card h5{
+  font-family: var(--font-display);
+  font-size: .95rem;
+  color: var(--blue-deep);
+  margin-bottom: 4px;
+}
+.mini-card p{ font-size: .82rem; color:#5a584f; }
+
+.mini-card-featured{
+  background: var(--white);
+  border: 1.5px solid rgba(7,43,112,.1);
+  border-radius: 18px;
+  padding: 26px 24px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  transition: border-color .3s ease, transform .3s ease;
+}
+.mini-card-featured:hover{
+  border-color: var(--orange);
+  transform: translateY(-4px);
+}
+.mini-card-featured .icon-badge{
+  width:54px; height:54px;
+  border-radius:50%;
+  background: rgba(255,122,0,.12);
+  display:flex; align-items:center; justify-content:center;
+  color: var(--orange);
+  font-size:1.4rem;
+  flex-shrink:0;
+}
+.mini-card-featured .icon-badge-photo{
+  width:64px; height:64px;
+  border-radius:50%;
+  object-fit:cover;
+  flex-shrink:0;
+}
+.mini-card-featured h5{
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--blue-deep);
+  margin-bottom: 4px;
+}
+.mini-card-featured p{ font-size:.88rem; color:#5a584f; }
+.mini-card-featured .badge-unico{
+  display:inline-block;
+  margin-top: 8px;
+  font-size:.72rem;
+  font-weight:700;
+  color: var(--orange-dark);
+  background: rgba(255,122,0,.1);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+ 
+/* ==================================================
+   9. DESTAQUE / CTA MILKSHAKE — banner de arte fechada
+   (texto e botão já vêm desenhados na imagem)
+================================================== */
+.spotlight{
+  overflow:hidden;
+}
+.spotlight-banner{
+  display:block;
+  position:relative;
+  width:100%;
+  aspect-ratio: 1920 / 800;
+}
+.spotlight-banner-img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
+}
+@media (max-width: 767px){
+  .spotlight-banner{
+    aspect-ratio: 1080 / 1350;
+  }
+}
+ 
+/* ==================================================
+   10. EXPERIÊNCIA / AMBIENTE
+================================================== */
+.experience{
+  padding: 110px 0;
+}
+.experience-head{
+  max-width: 620px;
+  margin-bottom: 48px;
+}
+.experience-head h2{ color: var(--blue-deep); margin-top:14px; }
+.experience-grid{
+  display:grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  grid-template-rows: 220px 220px;
+  gap: 18px;
+}
+.photo-slot{
+  position:relative;
+  border-radius: 22px;
+  overflow:hidden;
+  background: var(--blue-dark); /* aparece se a foto não carregar */
+}
+.photo-slot.large{ grid-row: span 2; }
+.photo-slot img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
+}
+ 
+/* ==================================================
+   11. INSTAGRAM
+================================================== */
+.instagram{
+  padding: 100px 0;
+  background: var(--white);
+}
+.instagram-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap: 24px;
+  flex-wrap:wrap;
+  margin-bottom: 40px;
+}
+.instagram-head h2{ color: var(--blue-deep); margin-top:14px; }
+.insta-handle{
+  font-family: var(--font-display);
+  font-weight:700;
+  color: var(--orange-dark);
+}
+.insta-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.insta-tile{
+  position:relative;
+  border-radius: 16px;
+  overflow:hidden;
+  background: var(--blue);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
+.insta-tile iframe{
+  width: 100%;
+  height: 680px;
+  border:0;
+  display:block;
+}
+
+ 
+/* ==================================================
+   13. CTA FINAL
+================================================== */
+.final-cta{
+  padding: 90px 0;
+  background: var(--orange);
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.final-cta .container{ position:relative; z-index:2; }
+.final-cta h2{
+  color:#fff;
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  max-width: 18ch;
+  margin: 0 auto;
+}
+.final-cta p{
+  color: rgba(255,255,255,.9);
+  margin: 18px auto 34px;
+  max-width: 46ch;
+  font-size: 1.05rem;
+}
+.final-cta .btn-primary{
+  background: var(--blue-deep);
+  box-shadow: 0 14px 30px -12px rgba(6,20,50,.5);
+}
+.final-cta .btn-primary:hover{ background: var(--blue-dark); }
+ 
+/* ==================================================
+   14. FOOTER
+================================================== */
+.site-footer{
+  background: var(--blue-deep);
+  padding: 64px 0 28px;
+}
+.footer-top{
+  display:grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 44px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.footer-brand .brand{ color:#fff; }
+.footer-brand p{
+  margin-top: 16px;
+  color: #9fb3de;
+  font-size: .9rem;
+  max-width: 32ch;
+}
+.footer-social{ display:flex; gap:12px; margin-top:22px; }
+.footer-social a{
+  width: 38px; height:38px;
+  border-radius:50%;
+  border: 1px solid rgba(255,255,255,.2);
+  display:flex; align-items:center; justify-content:center;
+  color:#fff;
+  transition: background .3s ease, border-color .3s ease;
+}
+.footer-social a:hover{ background: var(--orange); border-color: var(--orange); }
+.footer-col h4{
+  font-family: var(--font-body);
+  font-size: .85rem;
+  color: #7f96c9;
+  font-weight:700;
+  margin-bottom: 18px;
+}
+.footer-col ul{ display:flex; flex-direction:column; gap:12px; }
+.footer-col a{
+  color: #dbe6ff;
+  font-size: .9rem;
+  transition: color .25s ease;
+}
+.footer-col a:hover{ color: var(--orange); }
+.footer-bottom{
+  padding-top: 26px;
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap: 12px;
+  color: #7f96c9;
+  font-size: .8rem;
+}
+ 
+/* ==================================================
+   15. RESPONSIVO
+================================================== */
+@media (max-width: 980px){
+  .main-nav, .header-actions .btn{ display:none; }
+  .nav-toggle{ display:flex; }
+ 
+  .manifesto .container{ grid-template-columns: 1fr; }
+ 
+  .milkshake-grid{ grid-template-columns: 1fr 1fr; }
+  .secondary-cats{ grid-template-columns: 1fr; gap: 40px; }
+ 
+  .experience-grid{ grid-template-columns: 1fr 1fr; grid-template-rows: 200px 200px 200px; }
+  .photo-slot.large{ grid-row: span 1; grid-column: span 2; }
+ 
+  .insta-grid{ grid-template-columns: repeat(3, 1fr); }
+ 
+  .location .container{ grid-template-columns: 1fr; }
+ 
+  .footer-top{ grid-template-columns: 1fr 1fr; }
+}
+ 
+@media (max-width: 620px){
+  .milkshake-grid{ grid-template-columns: 1fr; }
+  .small-grid{ grid-template-columns: 1fr; }
+  .insta-grid{ grid-template-columns: repeat(2, 1fr); }
+  .insta-tile iframe{ height: 560px; }
+  .footer-top{ grid-template-columns: 1fr; }
+  .hours-card{ padding: 26px; }
+}
+ 
+/* menu mobile */
+.mobile-nav{
+  position: fixed;
+  inset: 0;
+  background: var(--blue-deep);
+  z-index: 600;
+  display:flex;
+  flex-direction:column;
+  padding: 26px var(--edge) 40px;
+  transform: translateY(-100%);
+  transition: transform .45s var(--ease);
+}
+.mobile-nav.is-open{ transform: translateY(0); }
+.mobile-nav-top{ display:flex; justify-content:space-between; align-items:center; }
+.mobile-nav-top .brand{ color:#fff; }
+.mobile-close{
+  width: 42px; height:42px; border-radius:50%;
+  background: rgba(255,255,255,.1);
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem;
+}
+.mobile-nav-links{
+  margin-top: 60px;
+  display:flex; flex-direction:column; gap: 26px;
+}
+.mobile-nav-links a{
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  color:#fff;
+  font-weight:600;
+}
+.mobile-nav .btn{ margin-top: 40px; }
+</style>
+</head>
+<body>
+ 
+<!-- ==================================================
+     HEADER
+================================================== -->
+<header class="site-header" id="siteHeader">
+  <div class="container">
+    <a href="#topo" class="brand">
+  <img src="Images/logo.png">
+</a>
+ 
+    <nav class="main-nav" aria-label="Navegação principal">
+      <a href="#produtos">Cardápio</a>
+      <a href="#experiencia">Experiência</a>
+      <a href="#instagram">Instagram</a>
+    </nav>
+ 
+    <div class="header-actions">
+      <a href="#" class="btn btn-primary" data-pedido target="_blank" rel="noopener noreferrer">
+        Pedir agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </a>
+    </div>
+ 
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+</header>
+ 
+<!-- menu mobile -->
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-top">
+    <span class="brand">
+      <img src="Images/logo.png" alt="MilkShakers">
+    </span>
+    <button class="mobile-close" id="mobileClose" aria-label="Fechar menu"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="mobile-nav-links">
+    <a href="#produtos" class="mobile-link">Cardápio</a>
+    <a href="#experiencia" class="mobile-link">Experiência</a>
+    <a href="#instagram" class="mobile-link">Instagram</a>
+  </div>
+  <a href="#" class="btn btn-primary btn-block" data-pedido target="_blank" rel="noopener noreferrer">
+    Fazer pedido <i class="fa-solid fa-arrow-up-right-from-square"></i>
+  </a>
+</div>
+ 
+<!-- ==================================================
+     HERO
+================================================== -->
+<section class="hero" id="topo">
+  <div class="hero-carousel" id="heroCarousel">
+
+    <!-- SLIDE 1 -->
+    <a href="#" class="hero-slide is-active" data-hero-link="1" target="_blank" rel="noopener noreferrer" aria-label="Ver oferta do slide 1">
+      <picture>
+        <!-- ATUALIZE "hero-01-mobile.jpg" quando a arte de celular estiver pronta -->
+        <source media="(max-width: 767px)" srcset="Images/hero-01-mobile.png">
+        <img src="Images/hero-01-desktop.png" alt="MilkShakers" class="hero-slide-img">
+      </picture>
+    </a>
+
+    <!-- SLIDE 2 -->
+    <a href="#" class="hero-slide" data-hero-link="2" target="_blank" rel="noopener noreferrer" aria-label="Ver oferta do slide 2">
+      <picture>
+        <source media="(max-width: 767px)" srcset="Images/hero-02-mobile.png">
+        <img src="Images/hero-02-desktop.png" alt="MilkShakers" class="hero-slide-img">
+      </picture>
+    </a>
+
+    <!-- SLIDE 3 -->
+    <a href="#" class="hero-slide" data-hero-link="3" target="_blank" rel="noopener noreferrer" aria-label="Ver oferta do slide 3">
+      <picture>
+        <source media="(max-width: 767px)" srcset="Images/hero-03-mobile.png">
+        <img src="Images/hero-03-desktop.png" alt="MilkShakers" class="hero-slide-img">
+      </picture>
+    </a>
+
+    <!-- indicadores de slide -->
+    <div class="hero-dots">
+      <button type="button" class="hero-dot is-active" data-goto="0" aria-label="Ir para o slide 1"></button>
+      <button type="button" class="hero-dot" data-goto="1" aria-label="Ir para o slide 2"></button>
+      <button type="button" class="hero-dot" data-goto="2" aria-label="Ir para o slide 3"></button>
+    </div>
+  </div>
+</section>
+ 
+<!-- ==================================================
+     FAIXA CONTÍNUA
+================================================== -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-track">
+    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
+    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
+    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
+    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
+    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
+    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
+    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
+    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
+    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
+    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
+  </div>
+</div>
+ 
+<!-- ==================================================
+     MANIFESTO / SOBRE
+================================================== -->
+<section class="manifesto grain" id="sobre">
+  <div class="container">
+
+    <!-- foto da equipe/loja MilkShakers -->
+    <div class="manifesto-photo">
+      <img src="Images/sua-foto.jpg" alt="Equipe MilkShakers preparando um milkshake na loja" class="manifesto-photo-img">
+    </div>
+
+    <div class="manifesto-body">
+      <span class="eyebrow"><span class="dot"></span> Sobre a marca</span>
+      <h2 class="section-title manifesto-title" style="margin-top:14px;">A nossa história.</h2>
+      <p>
+      <p>
+        Há uma década, a <strong>MilkShakers</strong> começou sua trajetória levando
+        mais sabor e diversão para seus clientes. O que começou como uma franquia
+        ganhou uma nova identidade há 6 anos, quando <strong>Mayara Santos</strong>
+        assumiu a marca e passou a conduzir uma nova fase de crescimento e inovação.
+      </p>
+      <p>
+        Desde então, a MilkShakers busca ir além do milkshake, criando momentos,
+        experiências e um espaço onde cada cliente possa se sentir à vontade.
+      </p>
+      <p>
+        <strong>Sabor</strong>, <strong>criatividade</strong>, <strong>diversidade</strong>
+        e <strong>acolhimento</strong> fazem parte da essência da marca e continuam
+        guiando cada nova experiência.
+      </p>
+    </div>
+
+  </div>
+</section>
+ 
+<!-- ==================================================
+     PRODUTOS
+================================================== -->
+<section class="produtos" id="produtos">
+  <div class="container">
+ 
+    <div class="produtos-head">
+      <div>
+        <span class="eyebrow"><span class="dot"></span> Cardápio</span>
+        <h2 class="section-title" style="margin-top:14px; color:var(--blue-deep);">O que te espera na MilkShakers</h2>
+      </div>
+    </div>
+ 
+    <!-- MILKSHAKES — protagonista -->
+    <div class="cat-heading">
+      <span class="cat-num">01</span>
+      <div>
+        <h3>Milkshakes</h3>
+        <p>O motivo da loja existir</p>
+      </div>
+    </div>
+ 
+    <div class="milkshake-grid">
+      <div class="shake-card">
+        <img src="Images/milkshake-ovomaltine.png" alt="Milkshake de Ovomaltine" class="shake-photo">
+        <h4>Ovomaltine</h4>
+        <p>Cremoso, com o crocante e o sabor marcante de Ovomaltine.</p>
+      </div>
+      <div class="shake-card">
+        <img src="Images/milkshake-chocrocante-branco.png" alt="Milkshake Chocrocante Branco" class="shake-photo">
+        <h4>Chocrocante Branco</h4>
+        <p>Chocolate branco cremoso com pedaços crocantes em cada colherada.</p>
+      </div>
+      <div class="shake-card">
+        <img src="Images/milkshake-floresta-negra.png" alt="Milkshake Floresta Negra" class="shake-photo">
+        <h4>Floresta Negra</h4>
+        <p>Chocolate e cereja, finalizado com uma cereja no topo.</p>
+      </div>
+    </div>
+ 
+    <!-- COOKIES / QUICHES / CAFÉS — coadjuvantes -->
+    <div class="secondary-cats">
+      <div>
+        <div class="cat-heading">
+          <span class="cat-num">02</span>
+          <div><h3>Cookies</h3><p>Quentinhos, na medida</p></div>
+        </div>
+        <!-- COMENTÁRIO: ajuste os nomes se quiser diferenciar melhor os 2 cookies -->
+        <div class="small-grid">
+          <div class="mini-card"><img src="Images/cookie-tradicional.png" alt="Cookie Tradicional" class="mini-thumb"><h5>Cookie Tradicional</h5><p>Feito na hora, sempre quentinho.</p></div>
+          <div class="mini-card"><img src="Images/cookie-nutella.png" alt="Cookie de Nutella" class="mini-thumb"><h5>Cookie Dark Nutella</h5><p>Coberto com uma camada generosa de Nutella.</p></div>
+        </div>
+      </div>
+ 
+      <div>
+        <div class="cat-heading">
+          <span class="cat-num">03</span>
+          <div><h3>Quiches</h3><p>Salgadas, feitas com carinho</p></div>
+        </div>
+        <div class="small-grid">
+          <div class="mini-card"><img src="Images/quiche-frango.png" alt="Quiche de Frango" class="mini-thumb"><h5>Quiche de Frango</h5><p>Nossa receita exclusiva, feita fresca todos os dias.</p></div>
+          <div class="mini-card"><img src="Images/quiche-calabresa.png" alt="Quiche de Calabresa" class="mini-thumb"><h5>Quiche de Calabresa</h5><p>Saborosa, feita fresca todos os dias.</p></div>
+        </div>
+      </div>
+ 
+      <div>
+        <div class="cat-heading">
+          <span class="cat-num">04</span>
+          <div><h3>Cafés</h3><p>Pra fechar com chave de ouro</p></div>
+        </div>
+        <div class="small-grid">
+          <div class="mini-card"><img src="Images/cafe-tradicional.jpg" alt="Café MilkShakers" class="mini-thumb"><h5>Café</h5><p>Fresquinho, na medida certa.</p></div>
+          <div class="mini-card"><img src="Images/cafe-frappuccino.jpg" alt="Frappuccino" class="mini-thumb"><h5>Frappuccino Especial da Milk</h5><p>Gelado, batido e bem cremoso.</p></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="cat-heading">
+          <span class="cat-num">05</span>
+          <div><h3>Brownie</h3><p>Denso e chocolatudo</p></div>
+        </div>
+        <div class="mini-card">
+          <img src="Images/brownie.png" alt="Brownie" class="mini-thumb">
+          <h5>Brownie Tradicional</h5>
+          <p>Denso, chocolatudo, na medida certa.</p>
+        </div>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+<!-- ==================================================
+     DESTAQUE / SPOTLIGHT
+================================================== -->
+<section class="spotlight">
+  <a href="#" class="spotlight-banner" data-pedido target="_blank" rel="noopener noreferrer" aria-label="Ir para pedidos">
+    <picture>
+      <source media="(max-width: 767px)" srcset="Images/spotlight-fundo-mobile.png">
+      <img src="Images/spotlight-fundo.png" alt="Espresso. Cremoso. Feito na hora. Ir para pedidos." class="spotlight-banner-img">
+    </picture>
+  </a>
+</section>
+ 
+<!-- ==================================================
+     EXPERIÊNCIA / AMBIENTE
+================================================== -->
+<section class="experience" id="experiencia">
+  <div class="container">
+    <div class="experience-head">
+      <span class="eyebrow"><span class="dot"></span> A loja</span>
+      <h2 class="section-title">Um ambiente feito para ficar.</h2>
+      <p class="section-lede" style="margin-top:14px;">
+        Cores, texturas e cheirinho de milkshake fresco. A MilkShakers foi desenhada
+        para ser um lugar em que você quer sentar, tirar foto e voltar.
+      </p>
+    </div>
+ 
+    <!-- fotos reais da loja MilkShakers -->
+    <div class="experience-grid">
+      <div class="photo-slot large"><img src="Images/loja-ambiente.png" alt="Ambiente da loja MilkShakers"></div>
+      <div class="photo-slot"><img src="Images/loja-balcao.png" alt="Balcão da loja MilkShakers"></div>
+      <div class="photo-slot"><img src="Images/loja-milkshake-detalhe.jpg" alt="Milkshakes MilkShakers no detalhe"></div>
+      <div class="photo-slot"><img src="Images/loja-cookies.jpg" alt="Cookies fresquinhos MilkShakers"></div>
+      <div class="photo-slot"><img src="Images/loja-cantinho.png" alt="Cantinho para sentar na loja MilkShakers"></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- ==================================================
+     INSTAGRAM
+================================================== -->
+<section class="instagram grain" id="instagram">
+  <div class="container">
+    <div class="instagram-head">
+      <div>
+        <span class="eyebrow"><span class="dot"></span> Siga a gente</span>
+        <h2 class="section-title">Acompanhe o dia a dia no <span class="insta-handle">@milkshakersbr</span></h2>
+      </div>
+      <a href="#" id="instaBtn" class="btn btn-ghost-dark" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-instagram"></i> Seguir no Instagram
+      </a>
+    </div>
+ 
+    <!-- Reels do @milkshakersbr — cards próprios do site, sem depender de
+         Reels do @milkshakersbr, via embed oficial do Instagram. -->
+    <div class="insta-grid">
+      <div class="insta-tile">
+        <iframe src="https://www.instagram.com/reel/DbT9HjlxqLj/embed/captioned" loading="lazy" allowtransparency="true" allowfullscreen="true" frameborder="0" scrolling="no"></iframe>
+      </div>
+      <div class="insta-tile">
+        <iframe src="https://www.instagram.com/reel/DYX8bWTxr0Y/embed/captioned" loading="lazy" allowtransparency="true" allowfullscreen="true" frameborder="0" scrolling="no"></iframe>
+      </div>
+      <div class="insta-tile">
+        <iframe src="https://www.instagram.com/reel/DWKS9A4Pe21/embed/captioned" loading="lazy" allowtransparency="true" allowfullscreen="true" frameborder="0" scrolling="no"></iframe>
+      </div>
+      <div class="insta-tile">
+        <iframe src="https://www.instagram.com/reel/DZBJc8FxE_r/embed/captioned" loading="lazy" allowtransparency="true" allowfullscreen="true" frameborder="0" scrolling="no"></iframe>
+      </div>
+      <div class="insta-tile">
+        <iframe src="https://www.instagram.com/reel/DTtU6dsjzlt/embed/captioned" loading="lazy" allowtransparency="true" allowfullscreen="true" frameborder="0" scrolling="no"></iframe>
+      </div>
+      <div class="insta-tile">
+        <iframe src="https://www.instagram.com/reel/DPChRhgD76g/embed/captioned" loading="lazy" allowtransparency="true" allowfullscreen="true" frameborder="0" scrolling="no"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- ==================================================
+     CTA FINAL
+================================================== -->
+<section class="final-cta grain">
+  <div class="container">
+    <h2>Bateu a vontade de milkshake?</h2>
+    <p>Faça seu pedido agora mesmo pelo nosso site oficial de pedidos e receba
+    sua MilkShakers do jeitinho que você gosta.</p>
+    <a href="#" class="btn btn-primary" data-pedido target="_blank" rel="noopener noreferrer">
+      Peça agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+    </a>
+  </div>
+</section>
+ 
+<!-- ==================================================
+     FOOTER
+================================================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="brand">
+          <img src="Images/logo.png" alt="MilkShakers">
+        </span>
+        <p>Uma marca de milkshakes que também traz cookies, quiches e cafés. Loja única, experiência inteira.</p>
+        <div class="footer-social">
+          <a href="#" id="instaFooterBtn" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://wa.me/5593991300019" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+ 
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="#produtos">Cardápio</a></li>
+          <li><a href="#experiencia">Experiência</a></li>
+          <li><a href="#instagram">Instagram</a></li>
+        </ul>
+      </div>
+ 
+      <div class="footer-col">
+        <h4>Pedidos</h4>
+        <ul>
+          <li><a href="#" data-pedido target="_blank" rel="noopener noreferrer">Fazer pedido</a></li>
+        </ul>
+      </div>
+    </div>
+ 
+    <div class="footer-bottom">
+      <span>&copy; <span id="anoAtual"></span> MilkShakers. Todos os direitos reservados.</span>
+    </div>
+  </div>
+</footer>
+ 
+<!-- ==================================================
+     JAVASCRIPT
+================================================== -->
+<script>
+  /* ------------------------------------------------
+     1. LINK ÚNICO DE PEDIDOS
+     Troque SOMENTE esta variável quando tiver o link real
+     do site oficial de pedidos da MilkShakers.
+     Todos os botões "PEDIR AGORA / FAZER PEDIDO / PEÇA AGORA /
+     IR PARA PEDIDOS" usam este mesmo valor automaticamente.
+  ------------------------------------------------ */
+  const LINK_PEDIDOS = "https://pedido.anota.ai/loja/milkshakers-1?f=msa";
+ 
+  /* Link do Instagram — opcional, edite quando quiser */
+  const LINK_INSTAGRAM = "https://www.instagram.com/milkshakersbr/";
+ 
+  /* Link do Google Maps — opcional, edite com o endereço real */
+  const LINK_MAPS = "https://maps.google.com";
+
+  /* ------------------------------------------------
+     LINKS DO CARROSSEL DA HERO
+     Cada capa (slide) pode levar para um lugar diferente
+     (ex.: slide 1 -> site de pedidos, slide 2 -> uma
+     promoção ou página específica). Troque só aqui.
+  ------------------------------------------------ */
+  const HERO_SLIDE_LINKS = {
+    "1": "https://pedido.anota.ai/loja/milkshakers-1?f=msa",
+    "2": "#produtos",
+    "3": "https://milkshakers.fidelimax.com.br/"
+  };
+ 
+  document.addEventListener("DOMContentLoaded", () => {
+    // aplica o link de pedidos em todos os botões marcados com data-pedido
+    document.querySelectorAll("[data-pedido]").forEach((el) => {
+      el.setAttribute("href", LINK_PEDIDOS);
+      el.setAttribute("target", "_blank");
+      el.setAttribute("rel", "noopener noreferrer");
+    });
+ 
+    // aplica o link do Instagram
+    ["instaBtn", "instaFooterBtn"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.setAttribute("href", LINK_INSTAGRAM);
+    });
+ 
+    // aplica o link do Maps
+    const mapsBtn = document.getElementById("mapsBtn");
+    if (mapsBtn) mapsBtn.setAttribute("href", LINK_MAPS);
+ 
+    // ano atual no rodapé
+    document.getElementById("anoAtual").textContent = new Date().getFullYear();
+ 
+    /* ------------------------------------------------
+       2. HEADER: muda de aparência ao rolar a página
+    ------------------------------------------------ */
+    const header = document.getElementById("siteHeader");
+    const onScroll = () => {
+      header.classList.toggle("is-scrolled", window.scrollY > 40);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+ 
+    /* ------------------------------------------------
+       3. MENU MOBILE
+    ------------------------------------------------ */
+    const navToggle = document.getElementById("navToggle");
+    const mobileNav = document.getElementById("mobileNav");
+    const mobileClose = document.getElementById("mobileClose");
+ 
+    const openMenu = () => {
+      mobileNav.classList.add("is-open");
+      navToggle.setAttribute("aria-expanded", "true");
+    };
+    const closeMenu = () => {
+      mobileNav.classList.remove("is-open");
+      navToggle.setAttribute("aria-expanded", "false");
+    };
+ 
+    navToggle.addEventListener("click", openMenu);
+    mobileClose.addEventListener("click", closeMenu);
+    document.querySelectorAll(".mobile-link").forEach((link) => {
+      link.addEventListener("click", closeMenu);
+    });
+
+    /* ------------------------------------------------
+       4. CARROSSEL DA HERO — troca automática entre
+       as capas, com bolinhas de navegação e pausa ao
+       passar o mouse/focar (acessibilidade).
+    ------------------------------------------------ */
+    const heroCarousel = document.getElementById("heroCarousel");
+    if (heroCarousel) {
+      // aplica o link de cada slide conforme HERO_SLIDE_LINKS
+      heroCarousel.querySelectorAll("[data-hero-link]").forEach((el) => {
+        const key = el.getAttribute("data-hero-link");
+        if (HERO_SLIDE_LINKS[key]) {
+          const url = HERO_SLIDE_LINKS[key];
+          el.setAttribute("href", url);
+          // link interno (#seção) abre na mesma página; externo abre em nova aba
+          if (!url.startsWith("#")) {
+            el.setAttribute("target", "_blank");
+            el.setAttribute("rel", "noopener noreferrer");
+          } else {
+            el.removeAttribute("target");
+            el.removeAttribute("rel");
+          }
+        }
+      });
+
+      // ajusta a proporção do carrossel à da arte REAL (desktop ou mobile),
+      // assim a imagem nunca é cortada, mesmo que a proporção mude
+      const heroImg = heroCarousel.querySelector(".hero-slide-img");
+      const syncHeroRatio = () => {
+        if (heroImg && heroImg.naturalWidth && heroImg.naturalHeight) {
+          heroCarousel.style.aspectRatio = heroImg.naturalWidth + " / " + heroImg.naturalHeight;
+        }
+      };
+      if (heroImg) {
+        if (heroImg.complete) syncHeroRatio();
+        heroImg.addEventListener("load", syncHeroRatio);
+        window.addEventListener("resize", () => setTimeout(syncHeroRatio, 150));
+      }
+
+      const slides = heroCarousel.querySelectorAll(".hero-slide");
+      const dots = heroCarousel.querySelectorAll(".hero-dot");
+      const intervalMs = 5000; // tempo entre trocas automáticas
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let current = 0;
+      let timer = null;
+
+      const goTo = (index) => {
+        slides[current].classList.remove("is-active");
+        dots[current] && dots[current].classList.remove("is-active");
+        current = (index + slides.length) % slides.length;
+        slides[current].classList.add("is-active");
+        dots[current] && dots[current].classList.add("is-active");
+      };
+
+      const start = () => {
+        if (reduceMotion || slides.length < 2) return;
+        stop();
+        timer = setInterval(() => goTo(current + 1), intervalMs);
+      };
+      const stop = () => {
+        if (timer) { clearInterval(timer); timer = null; }
+      };
+
+      dots.forEach((dot, i) => {
+        dot.addEventListener("click", () => { goTo(i); start(); });
+      });
+
+      heroCarousel.addEventListener("mouseenter", stop);
+      heroCarousel.addEventListener("mouseleave", start);
+      heroCarousel.addEventListener("focusin", stop);
+      heroCarousel.addEventListener("focusout", start);
+
+      start();
+    }
+  });
+</script>
+ 
+</body>
+</html>
