@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Página não encontrada — MilkShakers</title>
+<!-- ícone do site (aparece na aba do navegador e ao lado do link no Google) -->
+<link rel="icon" href="Images/favicon-48.png" type="image/png" sizes="48x48">
+<link rel="icon" href="Images/favicon-192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="Images/favicon-180.png">
 <meta name="robots" content="noindex">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,10 +30,14 @@
   --font-display: "Unbounded", sans-serif;
   --font-body: "Manrope", sans-serif;
   --ease: cubic-bezier(.22,.85,.3,1);
+  --bounce: cubic-bezier(.34,1.56,.64,1);
+
+  /* tamanho dos números "4" — o copo acompanha */
+  --d: clamp(4.4rem, 15vw, 8.5rem);
 }
 
 *{ box-sizing:border-box; margin:0; padding:0; }
-html,body{ height:100%; }
+html,body{ min-height:100%; }
 body{
   font-family: var(--font-body);
   background: var(--blue);
@@ -43,6 +52,7 @@ body{
   position:relative;
   padding: 32px 20px 60px;
 }
+a{ color:inherit; text-decoration:none; }
 
 /* textura sutil */
 body::before{
@@ -63,39 +73,75 @@ main{
   align-items:center;
 }
 
-.eyebrow{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  font-weight:700;
-  font-size:.82rem;
-  color:#ffcfa0;
-  margin-bottom:16px;
-}
-.eyebrow .dot{ width:8px; height:8px; border-radius:50%; background:var(--orange); }
-
+/* ---------- 4 [copo] 4 ---------- */
 .code-404{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  gap: calc(var(--d) * .04);
   font-family: var(--font-display);
   font-weight:900;
-  font-size: clamp(4rem, 14vw, 7rem);
+  font-size: var(--d);
   line-height:1;
   letter-spacing:-2px;
   color:#fff;
 }
-.code-404 span{ color: var(--orange); }
+.digit{ display:block; }
+.d-left{  animation: slide-l .85s var(--bounce) .1s both, bob 3.4s ease-in-out 1.4s infinite; }
+.d-right{ animation: slide-r .85s var(--bounce) .1s both, bob 3.4s ease-in-out 1.9s infinite; }
 
+.cup-wrap{
+  display:block;
+  height: calc(var(--d) * 1.62);
+  width:auto;
+  aspect-ratio: 120 / 210;
+  cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
+  animation: drop-in .95s var(--bounce) .3s both;
+}
+.cup-wrap:focus-visible{ outline:3px solid var(--orange); outline-offset:6px; border-radius:16px; }
+.cup-wrap svg{ display:block; width:100%; height:100%; overflow:visible; }
+
+/* copo balança de leve */
+.cup{
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: sway 3.2s ease-in-out 1.3s infinite;
+}
+.cup-wrap.shake .cup{ animation: jiggle .8s ease-in-out 1; }
+
+/* ondas do milkshake */
+.wave-a{ animation: wave 2.2s linear infinite; }
+.wave-b{ animation: wave 3.4s linear infinite reverse; }
+
+/* cereja flutuando */
+.cherry{ animation: cherry 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+
+/* gotas caindo + poça */
+.drop{ animation: drip 2.6s cubic-bezier(.5,0,.9,.5) infinite; opacity:0; }
+.drop.d2{ animation-delay: 1.3s; }
+.puddle{
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: puddle 2.6s ease-in-out infinite;
+}
+
+/* ---------- textos ---------- */
 h1{
   font-family: var(--font-display);
   font-weight:700;
-  font-size: clamp(1.4rem, 3.4vw, 2rem);
-  margin: 10px 0 12px;
+  font-size: clamp(1.4rem, 3.6vw, 2.1rem);
+  margin: 26px 0 12px;
 }
-
 p.sub{
+  text-align: justify;
+  text-justify: inter-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
   font-size:1rem;
   color:#dbe6ff;
   max-width:44ch;
-  margin-bottom: 34px;
+  margin-bottom: 32px;
 }
 
 .actions{
@@ -113,7 +159,8 @@ p.sub{
   font-size:.92rem;
   padding: 14px 26px;
   border-radius:100px;
-  transition: transform .3s var(--ease), background .25s ease;
+  text-decoration:none;
+  transition: transform .3s var(--ease), background .25s ease, border-color .25s ease;
 }
 .btn:hover{ transform: translateY(-3px); }
 .btn-primary{
@@ -122,19 +169,189 @@ p.sub{
   box-shadow: 0 10px 24px -10px rgba(255,90,0,.5);
 }
 .btn-primary:hover{ background: var(--orange-dark); }
+.hint{
+  margin-top: 30px;
+  font-size:.82rem;
+  font-weight:600;
+  color:#a9c2f5;
+}
+.hint i{ margin-right:6px; }
+
+/* entrada escalonada dos textos */
+.reveal{ animation: fade-up .7s var(--ease) both; }
+.r1{ animation-delay:.55s; }
+.r2{ animation-delay:.7s; }
+.r3{ animation-delay:.85s; }
+.r4{ animation-delay:1s; }
+.r5{ animation-delay:1.2s; }
+
+/* ---------- animações ---------- */
+@keyframes slide-l{
+  from{ opacity:0; transform: translateX(-90px) rotate(-14deg); }
+  to  { opacity:1; transform: none; }
+}
+@keyframes slide-r{
+  from{ opacity:0; transform: translateX(90px) rotate(14deg); }
+  to  { opacity:1; transform: none; }
+}
+@keyframes bob{
+  0%,100%{ transform: translateY(0); }
+  50%    { transform: translateY(-7px); }
+}
+@keyframes drop-in{
+  0%   { opacity:0; transform: translateY(-170%) rotate(-14deg) scale(.9); }
+  55%  { opacity:1; }
+  100% { opacity:1; transform: none; }
+}
+@keyframes sway{
+  0%,100%{ transform: rotate(-3.5deg); }
+  50%    { transform: rotate(3.5deg); }
+}
+@keyframes jiggle{
+  0%,100%{ transform: rotate(0) scale(1,1); }
+  15%    { transform: rotate(-12deg) scale(1.04,.96); }
+  35%    { transform: rotate(10deg)  scale(.97,1.03); }
+  55%    { transform: rotate(-7deg); }
+  75%    { transform: rotate(4deg); }
+}
+@keyframes wave{
+  from{ transform: translateX(0); }
+  to  { transform: translateX(-60px); }
+}
+@keyframes cherry{
+  0%,100%{ transform: translateY(0) rotate(-3deg); }
+  50%    { transform: translateY(-3px) rotate(3deg); }
+}
+@keyframes drip{
+  0%   { opacity:0; transform: translateY(0) scale(.5); }
+  12%  { opacity:1; transform: translateY(0) scale(1); }
+  70%  { opacity:1; transform: translateY(88px) scale(1,1.25); }
+  76%  { opacity:0; transform: translateY(94px) scale(1,.6); }
+  100% { opacity:0; transform: translateY(94px); }
+}
+@keyframes puddle{
+  0%,60%{ transform: scaleX(.78); }
+  80%   { transform: scaleX(1); }
+  100%  { transform: scaleX(.78); }
+}
+@keyframes fade-up{
+  from{ opacity:0; transform: translateY(18px); }
+  to  { opacity:1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{ animation: none !important; transition: none !important; }
+  .drop{ opacity:0; }
+}
+/* ==================================================
+   TEXTOS JUSTIFICADOS — todos os textos do site
+   (para voltar ao normal, apague este bloco)
+================================================== */
+body{ text-align: justify; text-justify: inter-word; }
+
+/* Títulos ficam alinhados como antes: justificar título abre buracos
+   enormes entre as palavras. Se quiser títulos justificados também,
+   apague a linha abaixo (e a do título do final da página). */
+h1, h2, h3, h4, h5{ text-align: start; }
+h1{ text-align: center; }
+
 </style>
 </head>
 <body>
 
+
+
 <main>
-  <span class="eyebrow"><span class="dot"></span> Erro 404</span>
-  <div class="code-404">4<span>0</span>4</div>
-  <h1>Página não encontrada.</h1>
-  <p class="sub">Não encontramos o que você procurava. O endereço pode estar errado ou a página pode ter sido removida.</p>
-  <div class="actions">
-    <a href="index.html" class="btn btn-primary">Voltar para o início</a>
+  <div class="code-404" role="img" aria-label="404">
+    <span class="digit d-left" aria-hidden="true">4</span>
+
+    <!-- o "0" virou um copo de milkshake -->
+    <span class="cup-wrap" id="cup" role="button" tabindex="0" aria-label="Sacudir o milkshake">
+      <svg viewBox="0 0 120 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <clipPath id="cupClip">
+            <path d="M18 70 H102 L90 188 Q89.5 196 81 196 H39 Q30.5 196 30 188 Z"/>
+          </clipPath>
+          <linearGradient id="shake" gradientUnits="userSpaceOnUse" x1="0" y1="84" x2="0" y2="196">
+            <stop offset="0"  stop-color="#ffb26b"/>
+            <stop offset="1"  stop-color="#ff7a00"/>
+          </linearGradient>
+        </defs>
+
+        <!-- poça + gotas (fora do copo, não balançam) -->
+        <ellipse class="puddle" cx="62" cy="204" rx="36" ry="4" fill="#ff7a00"/>
+        <path class="drop"    d="M102 100 C105.5 105 106.5 108 102 111 C97.5 108 98.5 105 102 100 Z" fill="#ff9a3c"/>
+        <path class="drop d2" d="M102 100 C105.5 105 106.5 108 102 111 C97.5 108 98.5 105 102 100 Z" fill="#ff9a3c"/>
+
+        <g class="cup">
+          <!-- canudo -->
+          <line x1="80" y1="2" x2="68" y2="150" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+          <line x1="80" y1="2" x2="68" y2="150" stroke="#ff7a00" stroke-width="7" stroke-linecap="butt" stroke-dasharray="7 7"/>
+
+          <!-- milkshake dentro do copo -->
+          <g clip-path="url(#cupClip)">
+            <g class="wave-b" opacity=".55">
+              <path d="M0 84 q15 -8 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 V210 H0 Z" fill="#ffd2a1"/>
+            </g>
+            <g class="wave-a">
+              <path d="M0 90 q15 -8 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 V210 H0 Z" fill="url(#shake)"/>
+            </g>
+          </g>
+
+          <!-- vidro -->
+          <path d="M18 70 H102 L90 188 Q89.5 196 81 196 H39 Q30.5 196 30 188 Z"
+                fill="rgba(255,255,255,.10)" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M27 84 L36 176" stroke="rgba(255,255,255,.55)" stroke-width="4" stroke-linecap="round" fill="none"/>
+
+          <!-- trilha de milkshake escorrendo por fora -->
+          <path d="M101.5 70 V94" stroke="#ffb26b" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+
+          <!-- chantilly -->
+          <ellipse cx="60" cy="68" rx="45" ry="9" fill="#fff"/>
+          <path d="M22 68 C20 50 40 42 52 45 C56 30 80 30 84 45 C100 45 102 62 98 68 Z" fill="#fff7ec"/>
+          <path d="M30 60 Q46 52 60 60 T90 58" stroke="#7a3b16" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+          <!-- cereja -->
+          <g class="cherry">
+            <path d="M60 24 Q55 14 48 10" stroke="#2f7d32" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <circle cx="60" cy="33" r="9.5" fill="#e8123c"/>
+            <circle cx="56.5" cy="29.5" r="2.6" fill="rgba(255,255,255,.65)"/>
+          </g>
+        </g>
+      </svg>
+    </span>
+
+    <span class="digit d-right" aria-hidden="true">4</span>
   </div>
+
+  <h1 class="reveal r2">Opa! Essa página derramou.</h1>
+  <p class="sub reveal r3">Procuramos em todo o balcão e não encontramos o que você pediu. O endereço pode estar errado ou a página pode ter sido removida.</p>
+
+  <div class="actions reveal r4">
+    <a href="/" class="btn btn-primary">Voltar para o início</a>
+  </div>
+
+  <p class="hint reveal r5"><i class="fa-solid fa-hand-pointer"></i>Clique no copo e dê uma sacudida</p>
 </main>
+
+<script>
+  /* clique (ou Enter/Espaço) no copo: sacode o milkshake */
+  (function(){
+    var cup = document.getElementById("cup");
+    function shake(){
+      cup.classList.remove("shake");
+      void cup.offsetWidth;            /* reinicia a animação */
+      cup.classList.add("shake");
+    }
+    cup.addEventListener("click", shake);
+    cup.addEventListener("keydown", function(e){
+      if (e.key === "Enter" || e.key === " "){ e.preventDefault(); shake(); }
+    });
+    cup.querySelector(".cup").addEventListener("animationend", function(e){
+      if (e.animationName === "jiggle") cup.classList.remove("shake");
+    });
+  })();
+</script>
 
 </body>
 </html>

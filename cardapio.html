@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardápio — MilkShakers</title>
+<!-- ícone do site (aparece na aba do navegador e ao lado do link no Google) -->
+<link rel="icon" href="Images/favicon-48.png" type="image/png" sizes="48x48">
+<link rel="icon" href="Images/favicon-192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="Images/favicon-180.png">
+<meta name="description" content="Cardápio completo da MilkShakers: milkshakes tradicionais, especiais, açaí e premium e muito mais.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+/* ==================================================
+   TOKENS — iguais aos do index.html
+================================================== */
+:root{
+  --blue:        #0164fd;
+  --blue-dark:   #003caa;
+  --blue-deep:   #004bbd;
+  --white:       #FFFFFF;
+  --off-white:   #F4F0E7;
+  --orange:      #FF7A00;
+  --orange-dark: #E85D04;
+  --text:        #111111;
+
+  --font-display: "Unbounded", sans-serif;
+  --font-body: "Manrope", sans-serif;
+
+  --radius-blob: 40% 60% 55% 45% / 45% 40% 60% 55%;
+  --container: 1180px;
+  --edge: clamp(20px, 5vw, 64px);
+  --ease: cubic-bezier(.22,.85,.3,1);
+  --header-h: 84px;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; scroll-padding-top: calc(var(--header-h) + 70px); }
+body{
+  font-family: var(--font-body);
+  color: var(--text);
+  background: var(--off-white);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img, svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; }
+button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+:focus-visible{ outline:3px solid var(--orange); outline-offset:3px; }
+
+/* textos corridos justificados */
+p, .section-lede{
+  text-align: justify;
+  text-justify: inter-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.container{ max-width:var(--container); margin:0 auto; padding:0 var(--edge); }
+
+h1,h2,h3,h4{
+  font-family: var(--font-display);
+  line-height:1.05;
+  letter-spacing:-0.01em;
+  font-weight:700;
+}
+
+/* ==================================================
+   BOTÕES
+================================================== */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  font-family: var(--font-display);
+  font-weight:600; font-size:.95rem;
+  padding:15px 28px;
+  border-radius:100px;
+  transition: transform .35s var(--ease), background .25s ease, box-shadow .25s ease;
+  white-space:nowrap;
+}
+.btn i{ font-size:.85em; }
+.btn:hover{ transform:translateY(-3px); }
+.btn-primary{ background:var(--orange); color:#fff; box-shadow:0 10px 24px -10px rgba(232,93,4,.6); }
+.btn-primary:hover{ background:var(--orange-dark); }
+.btn-block{ width:100%; }
+
+/* ==================================================
+   HEADER (mesmo do site)
+================================================== */
+.site-header{
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  padding:20px 0;
+  background:#004ABB;
+  transition: padding .35s var(--ease), box-shadow .35s var(--ease);
+}
+.site-header .container{ display:flex; align-items:center; justify-content:space-between; gap:24px; }
+.site-header.is-scrolled{ padding:12px 0; box-shadow:0 8px 30px -18px rgba(0,0,0,.5); }
+.brand{ display:flex; align-items:center; gap:10px; color:#fff; }
+.brand img{ width:150px; height:auto; display:block; }
+.main-nav{ display:flex; align-items:center; gap:34px; }
+.main-nav a{
+  font-weight:600; font-size:.92rem; color:#e7edfb;
+  position:relative; padding:4px 0;
+}
+.main-nav a::after{
+  content:""; position:absolute; left:0; bottom:-2px;
+  width:0; height:2px; background:var(--orange);
+  transition: width .3s var(--ease);
+}
+.main-nav a:hover::after,
+.main-nav a[aria-current="page"]::after{ width:100%; }
+.main-nav a[aria-current="page"]{ color:#fff; }
+.header-actions{ display:flex; align-items:center; gap:16px; }
+.header-actions .btn{ padding:12px 22px; font-size:.88rem; }
+.nav-toggle{
+  display:none; width:42px; height:42px; border-radius:50%;
+  background:rgba(255,255,255,.14);
+  align-items:center; justify-content:center;
+  font-size:1.1rem; color:#fff;
+}
+
+/* menu mobile */
+.mobile-nav{
+  position:fixed; inset:0; background:var(--blue-deep); z-index:600;
+  display:flex; flex-direction:column;
+  padding:26px var(--edge) 40px;
+  transform:translateY(-100%);
+  transition: transform .45s var(--ease);
+}
+.mobile-nav.is-open{ transform:translateY(0); }
+.mobile-nav-top{ display:flex; justify-content:space-between; align-items:center; }
+.mobile-close{
+  width:42px; height:42px; border-radius:50%;
+  background:rgba(255,255,255,.1); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:1.1rem;
+}
+.mobile-nav-links{ margin-top:60px; display:flex; flex-direction:column; gap:26px; }
+.mobile-nav-links a{
+  font-family:var(--font-display); font-size:1.7rem; color:#fff; font-weight:600;
+}
+.mobile-nav .btn{ margin-top:40px; }
+
+/* ==================================================
+   TOPO DO CARDÁPIO
+================================================== */
+.menu-hero{
+  background: var(--blue);
+  padding: calc(var(--header-h) + 56px) 0 64px;
+  position:relative;
+  overflow:hidden;
+}
+.menu-hero .container{ position:relative; z-index:2; }
+.menu-hero h1{
+  color:#fff;
+  font-size:clamp(2.4rem, 6vw, 4.4rem);
+  font-weight:800;
+}
+.menu-hero p{
+  color:#dbe6ff;
+  font-size:1.1rem;
+  max-width:42ch;
+  margin-top:16px;
+}
+
+.search{
+  margin-top:32px;
+  position:relative;
+  max-width:460px;
+}
+.search i{
+  position:absolute; left:20px; top:50%; transform:translateY(-50%);
+  color:var(--blue-deep); pointer-events:none;
+}
+.search input{
+  width:100%;
+  font-family:var(--font-body);
+  font-size:1rem; font-weight:600;
+  padding:16px 20px 16px 50px;
+  border-radius:100px;
+  border:2px solid transparent;
+  background:#fff; color:var(--text);
+}
+.search input::placeholder{ color:#7a7870; font-weight:500; }
+.search input:focus{ outline:none; border-color:var(--orange); }
+
+/* ==================================================
+   ABAS DE CATEGORIA (fixas ao rolar)
+================================================== */
+.tabs-bar{
+  position:sticky; top:var(--header-h);
+  z-index:400;
+  background:var(--off-white);
+  border-bottom:1.5px solid rgba(0,75,189,.12);
+}
+.tabs{
+  display:flex; gap:10px;
+  padding:14px 0;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{ display:none; }
+.tabs a{
+  flex-shrink:0;
+  font-family:var(--font-display);
+  font-weight:600; font-size:.82rem;
+  padding:11px 20px;
+  border-radius:100px;
+  color:var(--blue-deep);
+  border:1.5px solid rgba(0,75,189,.25);
+  transition: background .25s ease, color .25s ease, border-color .25s ease;
+}
+.tabs a:hover{ border-color:var(--blue-deep); }
+.tabs a.is-active{
+  background:var(--blue-deep); color:#fff; border-color:var(--blue-deep);
+}
+
+/* ==================================================
+   SEÇÕES
+================================================== */
+.menu-body{ padding:56px 0 90px; }
+.menu-section{ margin-bottom:72px; }
+.menu-section[hidden]{ display:none; }
+
+.section-head{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  gap:24px; flex-wrap:wrap;
+  margin-bottom:26px;
+}
+.section-head h2{
+  font-size:clamp(1.7rem, 3.4vw, 2.5rem);
+  color:var(--blue-deep);
+}
+.section-head p{
+  margin-top:8px;
+  font-weight:600; color:#5a584f;
+}
+
+/* preços por tamanho */
+.sizes{ display:flex; gap:10px; flex-wrap:wrap; }
+.size{
+  background:#fff;
+  border:1.5px solid rgba(0,75,189,.14);
+  border-radius:16px;
+  padding:10px 18px;
+  text-align:center;
+  min-width:96px;
+}
+.size b{
+  display:block;
+  font-family:var(--font-display);
+  font-size:.78rem; color:#5a584f; font-weight:600;
+}
+.size span{
+  font-family:var(--font-display);
+  font-weight:800; font-size:1.05rem; color:var(--orange-dark);
+}
+
+/* lista de sabores */
+.items{
+  background:#fff;
+  border-radius:24px;
+  padding:14px 28px;
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  column-gap:40px;
+}
+.item{
+  display:flex; align-items:baseline; gap:14px;
+  padding:13px 0;
+  border-bottom:1px dashed rgba(0,75,189,.2);
+  font-weight:700;
+  color:#1d1c19;
+}
+.item[hidden]{ display:none; }
+.item .code{
+  font-family:var(--font-display);
+  font-size:.74rem; font-weight:600;
+  color:var(--orange-dark);
+  min-width:2.4em;
+  flex-shrink:0;
+}
+
+/* PREMIUM — o destaque da página */
+.premium .items{
+  background:var(--blue-deep);
+}
+.premium .item{ color:#fff; border-bottom-color:rgba(255,255,255,.22); position:relative; z-index:1; }
+.premium .item .code{ color:#ffb26b; }
+.premium .price-tag{
+  background:var(--orange);
+  color:#fff;
+  border-radius:20px;
+  padding:12px 24px;
+  text-align:center;
+  box-shadow:0 12px 26px -12px rgba(232,93,4,.7);
+}
+.premium .price-tag b{
+  display:block;
+  font-family:var(--font-display);
+  font-size:.74rem; font-weight:600;
+}
+.premium .price-tag span{
+  font-family:var(--font-display);
+  font-weight:800; font-size:1.5rem;
+}
+
+/* AÇAÍ */
+.acai-box{
+  background:#fff;
+  border-radius:24px;
+  padding:30px 28px;
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:36px;
+  align-items:center;
+}
+.acai-box h3{ font-size:1.05rem; color:var(--blue-deep); margin-bottom:16px; }
+.addons{ display:flex; flex-wrap:wrap; gap:8px; }
+.addons li{
+  font-size:.88rem; font-weight:700;
+  padding:8px 14px;
+  border-radius:100px;
+  background:var(--off-white);
+  color:var(--blue-dark);
+}
+.addon-note{
+  background:rgba(255,122,0,.1);
+  border-radius:18px;
+  padding:22px 24px;
+}
+.addon-note strong{
+  display:block;
+  font-family:var(--font-display);
+  font-size:1.05rem; color:var(--blue-deep);
+}
+.addon-note .addon-price{
+  display:block; margin-top:6px;
+  font-family:var(--font-display); font-weight:800;
+  color:var(--orange-dark); font-size:1.3rem;
+}
+.addon-note small{ display:block; margin-top:10px; color:#5a584f; font-weight:600; }
+
+.empty{
+  text-align:center;
+  display:none;
+  background:#fff; border-radius:24px;
+  padding:40px 28px; text-align:center;
+  font-weight:700; color:#5a584f;
+}
+.empty.is-visible{ display:block; }
+
+/* ==================================================
+   CTA + FOOTER
+================================================== */
+.final-cta{ padding:80px 0; background:var(--orange); text-align:center; }
+.final-cta h2{ color:#fff; font-size:clamp(1.8rem, 4vw, 2.8rem); max-width:18ch; margin:0 auto; }
+.final-cta p{ text-align:center; -webkit-hyphens:manual; hyphens:manual; color:rgba(255,255,255,.92); margin:16px auto 30px; max-width:46ch; font-size:1.05rem; }
+.final-cta .btn-primary{ background:var(--blue-deep); box-shadow:0 14px 30px -12px rgba(6,20,50,.5); }
+.final-cta .btn-primary:hover{ background:var(--blue-dark); }
+
+.site-footer{ background:var(--blue-deep); padding:64px 0 28px; }
+.footer-top{
+  display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px;
+  padding-bottom:44px; border-bottom:1px solid rgba(255,255,255,.12);
+}
+.footer-brand p{ margin-top:16px; color:#9fb3de; font-size:.9rem; max-width:32ch; }
+.footer-social{ display:flex; gap:12px; margin-top:22px; }
+.footer-social a{
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid rgba(255,255,255,.2);
+  display:flex; align-items:center; justify-content:center; color:#fff;
+  transition: background .3s ease, border-color .3s ease;
+}
+.footer-social a:hover{ background:var(--orange); border-color:var(--orange); }
+.footer-col h4{ font-family:var(--font-body); font-size:.85rem; color:#7f96c9; font-weight:700; margin-bottom:18px; }
+.footer-col ul{ display:flex; flex-direction:column; gap:12px; }
+.footer-col a{ color:#dbe6ff; font-size:.9rem; transition:color .25s ease; }
+.footer-col a:hover{ color:var(--orange); }
+.footer-bottom{ padding-top:26px; color:#7f96c9; font-size:.8rem; }
+
+/* ==================================================
+   RESPONSIVO
+================================================== */
+@media (max-width: 980px){
+  .main-nav, .header-actions .btn{ display:none; }
+  .nav-toggle{ display:flex; }
+  .items{ grid-template-columns:repeat(2, 1fr); }
+  .acai-box{ grid-template-columns:1fr; }
+  .footer-top{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width: 620px){
+  .items{ grid-template-columns:1fr; padding:8px 20px; }
+  .menu-hero{ padding-bottom:48px; }
+  .menu-section{ margin-bottom:56px; }
+  .size{ min-width:88px; padding:9px 14px; }
+  .footer-top{ grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *{ transition-duration:.01ms !important; }
+}
+/* ==================================================
+   TEXTOS JUSTIFICADOS — todos os textos do site
+   (para voltar ao normal, apague este bloco)
+================================================== */
+body{ text-align: justify; text-justify: inter-word; }
+
+/* Títulos ficam alinhados como antes: justificar título abre buracos
+   enormes entre as palavras. Se quiser títulos justificados também,
+   apague a linha abaixo (e a do título do final da página). */
+h1, h2, h3, h4, h5{ text-align: start; }
+.final-cta h2{ text-align: center; }
+.final-cta p{                    /* texto do final da página: justificado (o botão continua centralizado) */
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+</style>
+</head>
+<body>
+
+<!-- ==================================================
+     ENTRADA SUAVE — a página aparece aos poucos (sem tela de carregamento)
+     Para remover: apague este bloco inteiro (do começo até o </script>).
+================================================== -->
+<style>
+@keyframes entradaPagina{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes entradaSobe  { from{ opacity:0; transform:translateY(18px); } to{ opacity:1; transform:none; } }
+@keyframes entradaTopo  { from{ opacity:0; transform:translateY(-14px); } to{ opacity:1; transform:none; } }
+
+/* 1. a página inteira surge com um fade */
+body{ animation:entradaPagina .7s ease; }
+
+/* 2. o cabeçalho desce de leve */
+.site-header{ animation:entradaTopo .7s var(--ease) .05s backwards; }
+
+/* 3. título, texto e busca sobem um depois do outro */
+.menu-hero .container > *{ animation:entradaSobe .8s var(--ease) backwards; }
+.menu-hero .container > :nth-child(1){ animation-delay:.10s; }
+.menu-hero .container > :nth-child(2){ animation-delay:.22s; }
+.menu-hero .container > :nth-child(3){ animation-delay:.34s; }
+
+/* 4. a barra de categorias aparece por último */
+.tabs-bar{ animation:entradaPagina .8s ease .45s backwards; }
+
+/* 5. ao rolar, cada parte aparece subindo de leve */
+html.rv-on .section-head,
+html.rv-on .menu-section .items,
+html.rv-on .acai-box,
+html.rv-on .final-cta .container{
+  transition:opacity .9s var(--ease), transform .9s var(--ease);
+}
+html.rv-on .section-head:not(.rv-in),
+html.rv-on .menu-section .items:not(.rv-in),
+html.rv-on .acai-box:not(.rv-in),
+html.rv-on .final-cta .container:not(.rv-in){
+  opacity:0;
+  transform:translateY(24px);
+}
+
+@media print{
+  html.rv-on .section-head,
+  html.rv-on .menu-section .items,
+  html.rv-on .acai-box,
+  html.rv-on .final-cta .container{ opacity:1 !important; transform:none !important; }
+}
+/* quem prefere menos movimento: sem animação nenhuma */
+@media (prefers-reduced-motion: reduce){
+  body, .site-header, .menu-hero .container > *, .tabs-bar{ animation:none; }
+}
+</style>
+<script>
+(function () {
+  var reduz = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduz || !("IntersectionObserver" in window)) return;   // sem suporte: tudo aparece normal
+  document.documentElement.classList.add("rv-on");
+
+  var SELETOR = ".section-head, .menu-section .items, .acai-box, .final-cta .container";
+  function observar() {
+    var io = new IntersectionObserver(function (itens) {
+      itens.forEach(function (it) {
+        if (it.isIntersecting) {
+          it.target.classList.add("rv-in");
+          io.unobserve(it.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -6% 0px", threshold: 0.01 });
+    document.querySelectorAll(SELETOR).forEach(function (el) { io.observe(el); });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", observar);
+  else observar();
+})();
+</script>
+
+<!-- ==================================================
+     HEADER
+================================================== -->
+<header class="site-header" id="siteHeader">
+  <div class="container">
+    <a href="index.html" class="brand" aria-label="MilkShakers — página inicial">
+      <img src="Images/logo.png" alt="MilkShakers">
+    </a>
+
+    <nav class="main-nav" aria-label="Navegação principal">
+      <a href="cardapio.html" aria-current="page">Cardápio</a>
+      <a href="index.html#experiencia">Experiência</a>
+      <a href="index.html#instagram">Instagram</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="#" class="btn btn-primary" data-pedido target="_blank" rel="noopener noreferrer">
+        Pedir agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </a>
+    </div>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+</header>
+
+<!-- menu mobile -->
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-top">
+    <span class="brand"><img src="Images/logo.png" alt="MilkShakers"></span>
+    <button class="mobile-close" id="mobileClose" aria-label="Fechar menu"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="mobile-nav-links">
+    <a href="index.html" class="mobile-link">Início</a>
+    <a href="cardapio.html" class="mobile-link">Cardápio</a>
+    <a href="index.html#experiencia" class="mobile-link">Experiência</a>
+    <a href="index.html#instagram" class="mobile-link">Instagram</a>
+  </div>
+  <a href="#" class="btn btn-primary btn-block" data-pedido target="_blank" rel="noopener noreferrer">
+    Fazer pedido <i class="fa-solid fa-arrow-up-right-from-square"></i>
+  </a>
+</div>
+
+<main>
+
+<!-- ==================================================
+     TOPO
+================================================== -->
+<section class="menu-hero">
+  <div class="container">
+    <h1>Nosso cardápio</h1>
+    <p>
+    <label class="search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="search" id="busca" placeholder="Buscar sabor ou número" autocomplete="off" aria-label="Buscar sabor ou número">
+    </label>
+  </div>
+</section>
+
+<!-- abas de categoria -->
+<div class="tabs-bar">
+  <div class="container">
+    <nav class="tabs" id="tabs" aria-label="Categorias do cardápio">
+      <a href="#tradicionais">Tradicionais</a>
+      <a href="#especiais">Especiais</a>
+      <a href="#acai">Açaí</a>
+      <a href="#premium">Premium</a>
+    </nav>
+  </div>
+</div>
+
+<div class="menu-body">
+  <div class="container">
+
+    <!-- TRADICIONAIS -->
+    <section class="menu-section" id="tradicionais">
+      <div class="section-head">
+        <div>
+          <h2>Tradicionais</h2>
+          <p>Os sabores clássicos</p>
+        </div>
+        <div class="sizes">
+        <div class="size"><b>300ml</b><span>R$ 14,00</span></div>
+        <div class="size"><b>400ml</b><span>R$ 16,00</span></div>
+        <div class="size"><b>500ml</b><span>R$ 18,00</span></div>
+        </div>
+      </div>
+      <ul class="items">
+          <li class="item"><span class="code">001</span><span class="name">Abacate</span></li>
+          <li class="item"><span class="code">002</span><span class="name">Abacaxi</span></li>
+          <li class="item"><span class="code">007</span><span class="name">Amendoim</span></li>
+          <li class="item"><span class="code">009</span><span class="name">Banana</span></li>
+          <li class="item"><span class="code">010</span><span class="name">Banana com Canela</span></li>
+          <li class="item"><span class="code">011</span><span class="name">Banana com Cereais</span></li>
+          <li class="item"><span class="code">012</span><span class="name">Baunilha</span></li>
+          <li class="item"><span class="code">014</span><span class="name">Blue</span></li>
+          <li class="item"><span class="code">015</span><span class="name">Brigadeiro</span></li>
+          <li class="item"><span class="code">016</span><span class="name">Café</span></li>
+          <li class="item"><span class="code">018</span><span class="name">Cappuccino</span></li>
+          <li class="item"><span class="code">019</span><span class="name">Cereja</span></li>
+          <li class="item"><span class="code">020</span><span class="name">Chiclete</span></li>
+          <li class="item"><span class="code">021</span><span class="name">Chococo</span></li>
+          <li class="item"><span class="code">022</span><span class="name">Chocolate ao Leite</span></li>
+          <li class="item"><span class="code">023</span><span class="name">Chocolate Belga</span></li>
+          <li class="item"><span class="code">024</span><span class="name">Chocolate Branco</span></li>
+          <li class="item"><span class="code">025</span><span class="name">Coco</span></li>
+          <li class="item"><span class="code">032</span><span class="name">Cupuaçu</span></li>
+          <li class="item"><span class="code">033</span><span class="name">Danoninho Banana</span></li>
+          <li class="item"><span class="code">034</span><span class="name">Danoninho Morango</span></li>
+          <li class="item"><span class="code">035</span><span class="name">Doce de Leite</span></li>
+          <li class="item"><span class="code">036</span><span class="name">Doce de Leite com Chocolate</span></li>
+          <li class="item"><span class="code">037</span><span class="name">Doce de Leite com Coco</span></li>
+          <li class="item"><span class="code">039</span><span class="name">Frutas Tropicais</span></li>
+          <li class="item"><span class="code">040</span><span class="name">Frutas Vermelhas</span></li>
+          <li class="item"><span class="code">041</span><span class="name">Frutas Vermelhas com Chantily</span></li>
+          <li class="item"><span class="code">043</span><span class="name">Graviola</span></li>
+          <li class="item"><span class="code">045</span><span class="name">Iogurte</span></li>
+          <li class="item"><span class="code">047</span><span class="name">Iogurte Coco</span></li>
+          <li class="item"><span class="code">049</span><span class="name">Kiwi</span></li>
+          <li class="item"><span class="code">050</span><span class="name">Leite Condensado</span></li>
+          <li class="item"><span class="code">052</span><span class="name">Maçã Verde</span></li>
+          <li class="item"><span class="code">054</span><span class="name">Maracujá</span></li>
+          <li class="item"><span class="code">055</span><span class="name">Melancia</span></li>
+          <li class="item"><span class="code">057</span><span class="name">Menta</span></li>
+          <li class="item"><span class="code">058</span><span class="name">Milho Verde</span></li>
+          <li class="item"><span class="code">059</span><span class="name">Morango</span></li>
+          <li class="item"><span class="code">060</span><span class="name">Morango com Chantily</span></li>
+          <li class="item"><span class="code">061</span><span class="name">Mousse de Limão</span></li>
+          <li class="item"><span class="code">064</span><span class="name">Napolitano</span></li>
+          <li class="item"><span class="code">066</span><span class="name">Neston com Frutas Tropicais</span></li>
+          <li class="item"><span class="code">067</span><span class="name">Ovomaltine</span></li>
+          <li class="item"><span class="code">068</span><span class="name">Paçoquita</span></li>
+          <li class="item"><span class="code">070</span><span class="name">Passas ao Rum</span></li>
+          <li class="item"><span class="code">072</span><span class="name">Pistache</span></li>
+      </ul>
+    </section>
+
+    <!-- ESPECIAIS -->
+    <section class="menu-section" id="especiais">
+      <div class="section-head">
+        <div>
+          <h2>Especiais</h2>
+          <p>Escolha seu sabor</p>
+        </div>
+        <div class="sizes">
+        <div class="size"><b>300ml</b><span>R$ 17,00</span></div>
+        <div class="size"><b>400ml</b><span>R$ 18,00</span></div>
+        <div class="size"><b>500ml</b><span>R$ 21,00</span></div>
+        </div>
+      </div>
+      <ul class="items">
+          <li class="item"><span class="code">200</span><span class="name">Abacaxi Francês</span></li>
+          <li class="item"><span class="code">201</span><span class="name">Abacaxi Suíço</span></li>
+          <li class="item"><span class="code">202</span><span class="name">Alpino</span></li>
+          <li class="item"><span class="code">205</span><span class="name">Banana Flocos Chocolate Branco</span></li>
+          <li class="item"><span class="code">206</span><span class="name">Banana Flocos Chocolate</span></li>
+          <li class="item"><span class="code">207</span><span class="name">Banana com Leite Ninho</span></li>
+          <li class="item"><span class="code">208</span><span class="name">Batom Branco</span></li>
+          <li class="item"><span class="code">209</span><span class="name">Batom Preto</span></li>
+          <li class="item"><span class="code">214</span><span class="name">Bis Branco</span></li>
+          <li class="item"><span class="code">215</span><span class="name">Bis Preto</span></li>
+          <li class="item"><span class="code">217</span><span class="name">Bombom Ouro Branco</span></li>
+          <li class="item"><span class="code">218</span><span class="name">Bombom Sonho de Valsa</span></li>
+          <li class="item"><span class="code">220</span><span class="name">Brigadeiro de Panela</span></li>
+          <li class="item"><span class="code">225</span><span class="name">Choco Flocos</span></li>
+          <li class="item"><span class="code">226</span><span class="name">Choco Flocos Branco</span></li>
+          <li class="item"><span class="code">229</span><span class="name">Chocolate ao Leite</span></li>
+          <li class="item"><span class="code">230</span><span class="name">Chocolate Branco</span></li>
+          <li class="item"><span class="code">231</span><span class="name">Chocomenta</span></li>
+          <li class="item"><span class="code">235</span><span class="name">Chocrocante</span></li>
+          <li class="item"><span class="code">236</span><span class="name">Chocrocante Branco</span></li>
+          <li class="item"><span class="code">237</span><span class="name">Chokito</span></li>
+          <li class="item"><span class="code">240</span><span class="name">Classic Branco com Cookies</span></li>
+          <li class="item"><span class="code">242</span><span class="name">Diamante Negro</span></li>
+          <li class="item"><span class="code">245</span><span class="name">Farinha Láctea com Banana</span></li>
+          <li class="item"><span class="code">246</span><span class="name">Farinha Láctea</span></li>
+          <li class="item"><span class="code">247</span><span class="name">Flocos</span></li>
+          <li class="item"><span class="code">248</span><span class="name">Floresta Negra</span></li>
+          <li class="item"><span class="code">254</span><span class="name">Kit Kat</span></li>
+          <li class="item"><span class="code">256</span><span class="name">LaFerrero</span></li>
+          <li class="item"><span class="code">257</span><span class="name">LaFerrero com Coco</span></li>
+          <li class="item"><span class="code">260</span><span class="name">Leite Ninho</span></li>
+          <li class="item"><span class="code">263</span><span class="name">Menta com Flocos de Chocolate</span></li>
+          <li class="item"><span class="code">264</span><span class="name">Morango com Flocos de Chocolate</span></li>
+          <li class="item"><span class="code">265</span><span class="name">Negresco</span></li>
+          <li class="item"><span class="code">267</span><span class="name">Nutella</span></li>
+          <li class="item"><span class="code">268</span><span class="name">Óreo</span></li>
+          <li class="item"><span class="code">271</span><span class="name">Pé de Moleque</span></li>
+          <li class="item"><span class="code">273</span><span class="name">Prestígio</span></li>
+          <li class="item"><span class="code">287</span><span class="name">Trufa de Chocolate</span></li>
+          <li class="item"><span class="code">288</span><span class="name">Trufa de Chocolate Branco</span></li>
+      </ul>
+    </section>
+
+    <!-- AÇAÍ -->
+    <section class="menu-section" id="acai">
+      <div class="section-head">
+        <div>
+          <h2>Açaí Shakers</h2>
+          <p>Turbine com os adicionais</p>
+        </div>
+        <div class="sizes">
+        <div class="size"><b>300ml</b><span>R$ 18,00</span></div>
+        <div class="size"><b>400ml</b><span>R$ 20,00</span></div>
+        <div class="size"><b>500ml</b><span>R$ 22,00</span></div>
+        </div>
+      </div>
+      <div class="acai-box">
+        <div>
+          <h3>Adicionais</h3>
+          <ul class="addons">
+          <li>Banana</li>
+          <li>Kiwi</li>
+          <li>Morango</li>
+          <li>Castanha</li>
+          <li>Chantilly</li>
+          <li>Granola</li>
+          <li>Paçoca</li>
+          <li>Farinha láctea</li>
+          <li>Leite em pó</li>
+          <li>Leite condensado</li>
+          <li>Neston</li>
+          </ul>
+        </div>
+        <div class="addon-note">
+          <strong>Até 3 adicionais</strong>
+          <span class="addon-price">R$ 2,00 cada</span>
+          <small>Confira os adicionais disponíveis no balcão.</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- PREMIUM -->
+    <section class="menu-section premium" id="premium">
+      <div class="section-head">
+        <div>
+          <h2>Premium</h2>
+          <p>Combinações especiais</p>
+        </div>
+        <div class="price-tag"><b>Preço único</b><span>R$ 24,00</span></div>
+      </div>
+      <ul class="items">
+          <li class="item"><span class="code">511</span><span class="name">Maracujá Trufado</span></li>
+          <li class="item"><span class="code">512</span><span class="name">Morango com Ovomaltine</span></li>
+          <li class="item"><span class="code">513</span><span class="name">Morango com Nutella</span></li>
+          <li class="item"><span class="code">516</span><span class="name">Nutella com Ovomaltine</span></li>
+          <li class="item"><span class="code">601</span><span class="name">Brigadeiro com Morango</span></li>
+          <li class="item"><span class="code">602</span><span class="name">Ferrero Rocher</span></li>
+          <li class="item"><span class="code">603</span><span class="name">Kinder Bueno</span></li>
+          <li class="item"><span class="code">604</span><span class="name">Kit Kat</span></li>
+          <li class="item"><span class="code">606</span><span class="name">Nutella com Leite Ninho</span></li>
+      </ul>
+    </section>
+
+    <p class="empty" id="vazio">Nenhum sabor encontrado. Tente outro nome ou número.</p>
+
+  </div>
+</div>
+
+<!-- ==================================================
+     CTA FINAL
+================================================== -->
+<section class="final-cta">
+  <div class="container">
+    <h2>Já escolheu o seu?</h2>
+    <p>Faça seu pedido pelo nosso site oficial e receba sua MilkShakers do jeitinho que você gosta.</p>
+    <a href="#" class="btn btn-primary" data-pedido target="_blank" rel="noopener noreferrer">
+      Peça agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+    </a>
+  </div>
+</section>
+
+</main>
+
+<!-- ==================================================
+     FOOTER
+================================================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="brand"><img src="Images/logo.png" alt="MilkShakers"></span>
+        <p>Uma marca de milkshakes que também traz cookies, quiches e cafés. Loja única, experiência inteira.</p>
+        <div class="footer-social">
+          <a href="#" id="instaFooterBtn" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://wa.me/5593991300019" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="cardapio.html">Cardápio</a></li>
+          <li><a href="index.html#experiencia">Experiência</a></li>
+          <li><a href="index.html#instagram">Instagram</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Pedidos</h4>
+        <ul>
+          <li><a href="#" data-pedido target="_blank" rel="noopener noreferrer">Fazer pedido</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; <span id="anoAtual"></span> MilkShakers. Todos os direitos reservados.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* Links — mesmos do index.html */
+  const LINK_PEDIDOS   = "https://pedido.anota.ai/loja/milkshakers-1?f=msa";
+  const LINK_INSTAGRAM = "https://www.instagram.com/milkshakersbr/";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("[data-pedido]").forEach((el) => el.setAttribute("href", LINK_PEDIDOS));
+    const insta = document.getElementById("instaFooterBtn");
+    if (insta) insta.setAttribute("href", LINK_INSTAGRAM);
+    document.getElementById("anoAtual").textContent = new Date().getFullYear();
+
+    /* header: altura real + sombra ao rolar */
+    const header = document.getElementById("siteHeader");
+    const syncHeader = () => {
+      header.classList.toggle("is-scrolled", window.scrollY > 40);
+      document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+    };
+    syncHeader();
+    window.addEventListener("scroll", syncHeader, { passive: true });
+    window.addEventListener("resize", syncHeader);
+    window.addEventListener("load", syncHeader);
+
+    /* menu mobile */
+    const navToggle = document.getElementById("navToggle");
+    const mobileNav = document.getElementById("mobileNav");
+    const setMenu = (open) => {
+      mobileNav.classList.toggle("is-open", open);
+      navToggle.setAttribute("aria-expanded", String(open));
+    };
+    navToggle.addEventListener("click", () => setMenu(true));
+    document.getElementById("mobileClose").addEventListener("click", () => setMenu(false));
+    document.querySelectorAll(".mobile-link").forEach((l) => l.addEventListener("click", () => setMenu(false)));
+
+    /* aba ativa conforme a seção visível */
+    const tabLinks = [...document.querySelectorAll("#tabs a")];
+    const sections = tabLinks.map((a) => document.querySelector(a.getAttribute("href")));
+    const setActive = (id) => {
+      tabLinks.forEach((a) => {
+        const on = a.getAttribute("href") === "#" + id;
+        a.classList.toggle("is-active", on);
+      });
+    };
+    const spy = () => {
+      const line = header.offsetHeight + 120;
+      let current = sections[0].id;
+      sections.forEach((s) => {
+        if (!s.hidden && s.getBoundingClientRect().top <= line) current = s.id;
+      });
+      setActive(current);
+    };
+    window.addEventListener("scroll", spy, { passive: true });
+    spy();
+
+    /* busca por nome ou número (ignora acentos) */
+    const norm = (t) => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const busca = document.getElementById("busca");
+    const vazio = document.getElementById("vazio");
+    const itens = [...document.querySelectorAll(".item")];
+    const secoes = [...document.querySelectorAll(".menu-section")];
+
+    busca.addEventListener("input", () => {
+      const q = norm(busca.value.trim());
+      itens.forEach((li) => { li.hidden = q && !norm(li.textContent).includes(q); });
+      let achou = 0;
+      secoes.forEach((s) => {
+        const temLista = s.querySelector(".items");
+        if (!temLista) {
+          // Açaí: some enquanto estiver buscando
+          s.hidden = !!q;
+          return;
+        }
+        const visiveis = s.querySelectorAll(".item:not([hidden])").length;
+        s.hidden = q && visiveis === 0;
+        achou += visiveis;
+      });
+      vazio.classList.toggle("is-visible", !!q && achou === 0);
+      spy();
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MilkShakers — Milkshakes, Cookies, Quiches & Cafés</title>
+<!-- ícone do site (aparece na aba do navegador e ao lado do link no Google) -->
+<link rel="icon" href="Images/favicon-48.png" type="image/png" sizes="48x48">
+<link rel="icon" href="Images/favicon-192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="Images/favicon-180.png">
 <meta name="description" content="MilkShakers: a marca de milkshakes que também traz cookies, quiches e cafés. Conheça, sinta vontade e peça já.">
  
 <!-- ==================================================
@@ -108,6 +113,14 @@ h1,h2,h3,h4{
   color: #33312c;
 }
 .section-lede.on-blue{ color: #dbe6ff; }
+
+/* textos corridos justificados */
+p, .section-lede{
+  text-align: justify;
+  text-justify: inter-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
  
 /* ==================================================
    3. BOTÕES
@@ -392,14 +405,15 @@ h1,h2,h3,h4{
   padding: 40px 0 110px;
 }
 .produtos-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap: 24px;
-  margin-bottom: 48px;
-  flex-wrap:wrap;
+  display:grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 40px;
+  align-items:end;
+  margin-bottom: 56px;
 }
- 
+.produtos-head .section-lede{ justify-self:end; }
+.produtos-head .section-lede strong{ color: var(--blue-deep); }
+
 .cat-heading{
   display:flex;
   align-items:center;
@@ -409,41 +423,43 @@ h1,h2,h3,h4{
 .cat-heading .cat-num{
   font-family: var(--font-display);
   font-weight:800;
-  font-size: .82rem;
+  font-size: .9rem;
   color: var(--white);
   background: var(--orange);
-  width: 34px; height:34px;
+  width: 38px; height:38px;
   border-radius:50%;
   display:flex; align-items:center; justify-content:center;
   flex-shrink:0;
 }
 .cat-heading h3{ font-size: 1.5rem; color: var(--blue-deep); }
-.cat-heading p{ font-size:.9rem; color:#5a584f; font-weight:600; min-height: 2.5em; display:flex; align-items:center; }
- 
+.cat-heading p{ font-size:.9rem; color:#5a584f; font-weight:600; margin-top:4px; }
+
 /* -- destaque: milkshakes (grande, protagonista) -- */
 .milkshake-grid{
   display:grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 26px;
-  margin-bottom: 90px;
+  margin-bottom: 84px;
 }
 .shake-card{
   position:relative;
   background: var(--blue);
   border-radius: 28px;
-  padding: 30px 26px 26px;
-  min-height: 400px;
+  padding: 30px 26px 24px;
+  min-height: 460px;
   display:flex;
   flex-direction:column;
   justify-content:flex-end;
+  overflow:hidden;
   transition: transform .4s var(--ease), box-shadow .4s var(--ease);
 }
 .shake-card:hover{
   transform: translateY(-8px);
   box-shadow: 0 24px 48px -20px rgba(6,43,112,.55);
 }
-.shake-card:nth-child(2){ background: var(--blue-dark); }
-.shake-card:nth-child(3){ background: var(--blue-deep); }
+.shake-card:nth-child(1){ background: linear-gradient(175deg, #0a6dff 0%, #0050d6 100%); }
+.shake-card:nth-child(2){ background: linear-gradient(175deg, #0049c4 0%, #003296 100%); }
+.shake-card:nth-child(3){ background: linear-gradient(175deg, #0058e0 0%, #003ea8 100%); }
 .shake-card::before{
   content:"";
   position:absolute; inset:0;
@@ -451,33 +467,32 @@ h1,h2,h3,h4{
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   opacity:.06;
   mix-blend-mode:overlay;
-}
-.shake-card .shake-icon{
-  align-self:flex-start;
-  width: 108px;
-  margin-bottom: auto;
+  pointer-events:none;
 }
 .shake-card .shake-photo{
   align-self:center;
   width: min(75%, 230px);
-  margin: 0 auto auto;
+  margin: 26px auto auto;
   filter: drop-shadow(0 18px 26px rgba(0,0,0,.3));
   position:relative;
   z-index:2;
+  transition: transform .5s var(--ease);
 }
+.shake-card:hover .shake-photo{ transform: translateY(-8px) rotate(-2.5deg) scale(1.05); }
 .shake-tag{
-  position:absolute; top:22px; right:22px;
+  position:absolute; top:22px; left:22px;
+  z-index:3;
   background: var(--orange);
   color:#fff;
-  font-size:.72rem;
+  font-size:.74rem;
   font-weight:700;
-  padding: 6px 12px;
+  padding: 6px 13px;
   border-radius: 100px;
 }
 .shake-card h4{
   color:#fff;
-  font-size: 1.35rem;
-  margin-bottom: 8px;
+  font-size: 1.4rem;
+  margin: 22px 0 8px;
   position:relative; z-index:2;
 }
 .shake-card p{
@@ -485,97 +500,91 @@ h1,h2,h3,h4{
   font-size:.92rem;
   position:relative; z-index:2;
 }
- 
-/* -- cookies / quiches / cafés: grade secundária -- */
-.secondary-cats{
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 54px;
+.shake-foot{
+  position:relative; z-index:2;
+  display:flex; align-items:center; justify-content:flex-start; gap:12px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,.2);
+  font-size:.85rem;
+  font-weight:600;
+  color:#cfdcf7;
 }
-.small-grid{
+.shake-foot a{
+  display:inline-flex; align-items:center; gap:6px;
+  color:#fff; font-weight:700;
+  transition: gap .25s var(--ease), color .25s ease;
+}
+.shake-foot a:hover{ gap:11px; color:#ffb26b; }
+
+/* -- cookies / quiches / cafés / brownie -- */
+.extras-head{ margin: 0 0 26px; }
+.extras-head h3{ font-size: clamp(1.5rem, 2.8vw, 2rem); color: var(--blue-deep); }
+.extras-head p{ margin-top:6px; font-weight:600; color:#5a584f; }
+
+.extras{
   display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.extra-panel{
+  background: var(--white);
+  border: 1.5px solid rgba(7,43,112,.1);
+  border-radius: 26px;
+  padding: 26px 24px 8px;
+  display:flex;
+  flex-direction:column;
+  transition: border-color .3s ease, transform .3s var(--ease);
+}
+.extra-panel:hover{ border-color: var(--orange); transform: translateY(-4px); }
+.extra-panel .cat-heading{ margin-bottom: 10px; }
+.extra-panel .cat-heading h3{ font-size: 1.3rem; }
+.extra-item{
+  display:flex; align-items:center; gap:16px;
+  padding: 16px 0;
+  border-top: 1px dashed rgba(7,43,112,.18);
+}
+.extra-item img{
+  width: 76px; height: 76px;
+  border-radius: 18px;
+  object-fit: cover;
+  flex-shrink:0;
+  background: var(--off-white);
+}
+.extra-item h5{
+  font-family: var(--font-display);
+  font-size: .98rem;
+  color: var(--blue-deep);
+  margin-bottom: 4px;
+}
+.extra-item p{ font-size:.84rem; color:#5a584f; line-height:1.4; }
+
+/* -- aviso: isto é só uma amostra -- */
+.more-tile{
+  grid-column: span 2;
+  background: var(--blue-deep);
+  border-radius: 26px;
+  padding: 34px 36px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
   gap: 16px;
 }
-.mini-card{
-  background: var(--white);
-  border: 1.5px solid rgba(7,43,112,.1);
-  border-radius: 18px;
-  padding: 18px 16px;
-  transition: border-color .3s ease, transform .3s ease;
+.more-tile h3{ color:#fff; font-size: clamp(1.5rem, 2.8vw, 2rem); }
+.more-tile p{ color:#cfdcf7; max-width: 52ch; }
+.more-tile p strong{ color:#fff; }
+.more-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+.more-chips a{
+  font-size:.82rem; font-weight:700;
+  color:#fff;
+  padding: 8px 16px;
+  border-radius:100px;
+  border: 1.5px solid rgba(255,255,255,.3);
+  transition: background .25s ease, border-color .25s ease;
 }
-.mini-card:hover{
-  border-color: var(--orange);
-  transform: translateY(-4px);
-}
-.mini-card i{
-  color: var(--orange);
-  font-size: 1.3rem;
-  margin-bottom: 12px;
-  display:block;
-}
-.mini-card .mini-thumb{
-  width: 64px;
-  height: 64px;
-  border-radius: 14px;
-  object-fit: cover;
-  margin-bottom: 12px;
-  display:block;
-}
-.mini-card h5{
-  font-family: var(--font-display);
-  font-size: .95rem;
-  color: var(--blue-deep);
-  margin-bottom: 4px;
-}
-.mini-card p{ font-size: .82rem; color:#5a584f; }
-
-.mini-card-featured{
-  background: var(--white);
-  border: 1.5px solid rgba(7,43,112,.1);
-  border-radius: 18px;
-  padding: 26px 24px;
-  display:flex;
-  align-items:center;
-  gap:18px;
-  transition: border-color .3s ease, transform .3s ease;
-}
-.mini-card-featured:hover{
-  border-color: var(--orange);
-  transform: translateY(-4px);
-}
-.mini-card-featured .icon-badge{
-  width:54px; height:54px;
-  border-radius:50%;
-  background: rgba(255,122,0,.12);
-  display:flex; align-items:center; justify-content:center;
-  color: var(--orange);
-  font-size:1.4rem;
-  flex-shrink:0;
-}
-.mini-card-featured .icon-badge-photo{
-  width:64px; height:64px;
-  border-radius:50%;
-  object-fit:cover;
-  flex-shrink:0;
-}
-.mini-card-featured h5{
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  color: var(--blue-deep);
-  margin-bottom: 4px;
-}
-.mini-card-featured p{ font-size:.88rem; color:#5a584f; }
-.mini-card-featured .badge-unico{
-  display:inline-block;
-  margin-top: 8px;
-  font-size:.72rem;
-  font-weight:700;
-  color: var(--orange-dark);
-  background: rgba(255,122,0,.1);
-  padding: 3px 10px;
-  border-radius: 100px;
-}
+.more-chips a:hover{ background: var(--orange); border-color: var(--orange); }
+.more-actions{ display:flex; align-items:center; flex-wrap:wrap; gap:14px 18px; margin-top:6px; }
  
 /* ==================================================
    9. DESTAQUE / CTA MILKSHAKE — banner de arte fechada
@@ -692,6 +701,9 @@ h1,h2,h3,h4{
   margin: 0 auto;
 }
 .final-cta p{
+  text-align:center;
+  -webkit-hyphens: manual;
+  hyphens: manual;
   color: rgba(255,255,255,.9);
   margin: 18px auto 34px;
   max-width: 46ch;
@@ -767,8 +779,12 @@ h1,h2,h3,h4{
  
   .manifesto .container{ grid-template-columns: 1fr; }
  
+  .produtos-head{ grid-template-columns: 1fr; gap: 20px; }
+  .produtos-head .section-lede{ justify-self:start; }
   .milkshake-grid{ grid-template-columns: 1fr 1fr; }
-  .secondary-cats{ grid-template-columns: 1fr; gap: 40px; }
+  .shake-card:nth-child(3){ grid-column: span 2; }
+  .extras{ grid-template-columns: 1fr 1fr; }
+  .more-tile{ grid-column: span 2; }
  
   .experience-grid{ grid-template-columns: 1fr 1fr; grid-template-rows: 200px 200px 200px; }
   .photo-slot.large{ grid-row: span 1; grid-column: span 2; }
@@ -782,7 +798,10 @@ h1,h2,h3,h4{
  
 @media (max-width: 620px){
   .milkshake-grid{ grid-template-columns: 1fr; }
-  .small-grid{ grid-template-columns: 1fr; }
+  .shake-card:nth-child(3){ grid-column: auto; }
+  .shake-card{ min-height: 440px; }
+  .extras{ grid-template-columns: 1fr; }
+  .more-tile{ grid-column: auto; padding: 28px 24px; }
   .insta-grid{ grid-template-columns: repeat(2, 1fr); }
   .insta-tile iframe{ height: 560px; }
   .footer-top{ grid-template-columns: 1fr; }
@@ -821,9 +840,149 @@ h1,h2,h3,h4{
   font-weight:600;
 }
 .mobile-nav .btn{ margin-top: 40px; }
+/* ==================================================
+   TEXTOS JUSTIFICADOS — todos os textos do site
+   (para voltar ao normal, apague este bloco)
+================================================== */
+body{ text-align: justify; text-justify: inter-word; }
+
+/* Títulos ficam alinhados como antes: justificar título abre buracos
+   enormes entre as palavras. Se quiser títulos justificados também,
+   apague a linha abaixo (e a do título do final da página). */
+h1, h2, h3, h4, h5{ text-align: start; }
+.final-cta h2{ text-align: center; }
+.final-cta p{                    /* texto do final da página: justificado (o botão continua centralizado) */
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+/* ==================================================
+   HERO ARRASTÁVEL — troca sozinha e também dá para arrastar
+   com o mouse ou com o dedo (as capas ficam lado a lado)
+================================================== */
+.hero-carousel{
+  overflow:hidden;
+  touch-action:pan-y;           /* o dedo rola a página na vertical; na horizontal arrasta a hero */
+  -webkit-user-select:none;
+  user-select:none;
+}
+.hero-slide{
+  opacity:1;
+  cursor:grab;
+  transform:translate3d(100%,0,0);       /* capas esperando à direita */
+  will-change:transform;
+  transition:transform .6s var(--ease);
+  -webkit-user-drag:none;
+}
+.hero-slide:nth-child(3){ transform:translate3d(-100%,0,0); }   /* a última espera à esquerda (para dar a volta) */
+.hero-slide.is-active{ transform:none; }
+.hero-slide-img{ pointer-events:none; -webkit-user-drag:none; }
+.hero-carousel.is-dragging .hero-slide{ cursor:grabbing; transition:none; }
+.hero-carousel.hero-montando .hero-slide{ transition:none; }
+@media (prefers-reduced-motion: reduce){
+  .hero-slide{ transition:none; }
+}
 </style>
 </head>
 <body>
+
+<!-- ==================================================
+     ENTRADA SUAVE — a página aparece aos poucos (sem tela de carregamento)
+     Para remover: apague este bloco inteiro (do começo até o </script>).
+================================================== -->
+<style>
+@keyframes entradaPagina{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes entradaTopo  { from{ opacity:0; transform:translateY(-14px); } to{ opacity:1; transform:none; } }
+@keyframes entradaHero  { from{ opacity:0; transform:scale(1.025); } to{ opacity:1; transform:none; } }
+@keyframes revelar      { from{ opacity:0; transform:translateY(26px); } to{ opacity:1; transform:none; } }
+
+/* 1. a página inteira surge com um fade */
+body{ animation:entradaPagina .7s ease; }
+
+/* 2. o cabeçalho desce de leve */
+.site-header{ animation:entradaTopo .7s var(--ease) .05s backwards; }
+
+/* 3. a arte da hero "assenta" (começa um pouquinho maior e encaixa) */
+.hero-carousel{ animation:entradaHero 1.1s var(--ease) .12s backwards; }
+
+/* 4. a faixa aparece logo depois */
+.marquee-strip{ animation:entradaPagina .8s ease .5s backwards; }
+
+/* 5. ao rolar, cada parte aparece subindo de leve */
+html.rv-on .manifesto-photo:not(.rv-in),
+html.rv-on .manifesto-body:not(.rv-in),
+html.rv-on .produtos-head:not(.rv-in),
+html.rv-on .produtos .container > .cat-heading:not(.rv-in),
+html.rv-on .shake-card:not(.rv-in),
+html.rv-on .extras-head:not(.rv-in),
+html.rv-on .extra-panel:not(.rv-in),
+html.rv-on .more-tile:not(.rv-in),
+html.rv-on .spotlight-banner:not(.rv-in),
+html.rv-on .experience-head:not(.rv-in),
+html.rv-on .photo-slot:not(.rv-in),
+html.rv-on .instagram-head:not(.rv-in),
+html.rv-on .insta-tile:not(.rv-in),
+html.rv-on .final-cta .container:not(.rv-in),
+html.rv-on .footer-top:not(.rv-in){
+  opacity:0;
+}
+html.rv-on .rv-in{
+  animation:revelar .9s var(--ease) var(--rv-d, 0s) backwards;
+}
+
+/* no computador, os cards de uma mesma fileira entram um depois do outro */
+@media (min-width:981px){
+  .milkshake-grid > :nth-child(3n+2), .extras > :nth-child(3n+2), .insta-grid > :nth-child(3n+2){ --rv-d:.12s; }
+  .milkshake-grid > :nth-child(3n),   .extras > :nth-child(3n),   .insta-grid > :nth-child(3n){   --rv-d:.24s; }
+  .experience-grid > :nth-child(2), .experience-grid > :nth-child(4){ --rv-d:.10s; }
+  .experience-grid > :nth-child(3), .experience-grid > :nth-child(5){ --rv-d:.20s; }
+}
+
+@media print{
+html.rv-on .manifesto-photo,
+html.rv-on .manifesto-body,
+html.rv-on .produtos-head,
+html.rv-on .produtos .container > .cat-heading,
+html.rv-on .shake-card,
+html.rv-on .extras-head,
+html.rv-on .extra-panel,
+html.rv-on .more-tile,
+html.rv-on .spotlight-banner,
+html.rv-on .experience-head,
+html.rv-on .photo-slot,
+html.rv-on .instagram-head,
+html.rv-on .insta-tile,
+html.rv-on .final-cta .container,
+html.rv-on .footer-top{ opacity:1 !important; }
+}
+/* quem prefere menos movimento: sem animação nenhuma */
+@media (prefers-reduced-motion: reduce){
+  body, .site-header, .hero-carousel, .marquee-strip, html.rv-on .rv-in{ animation:none; }
+}
+</style>
+<script>
+(function () {
+  var reduz = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduz || !("IntersectionObserver" in window)) return;   // sem suporte: tudo aparece normal
+  document.documentElement.classList.add("rv-on");
+
+  var SELETOR = ".manifesto-photo, .manifesto-body, .produtos-head, .produtos .container > .cat-heading, .shake-card, .extras-head, .extra-panel, .more-tile, .spotlight-banner, .experience-head, .photo-slot, .instagram-head, .insta-tile, .final-cta .container, .footer-top";
+  function observar() {
+    var io = new IntersectionObserver(function (itens) {
+      itens.forEach(function (it) {
+        if (it.isIntersecting) {
+          it.target.classList.add("rv-in");
+          io.unobserve(it.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -6% 0px", threshold: 0.01 });
+    document.querySelectorAll(SELETOR).forEach(function (el) { io.observe(el); });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", observar);
+  else observar();
+})();
+</script>
+
  
 <!-- ==================================================
      HEADER
@@ -835,7 +994,7 @@ h1,h2,h3,h4{
 </a>
  
     <nav class="main-nav" aria-label="Navegação principal">
-      <a href="#produtos">Cardápio</a>
+      <a href="cardapio.html">Cardápio</a>
       <a href="#experiencia">Experiência</a>
       <a href="#instagram">Instagram</a>
     </nav>
@@ -861,7 +1020,7 @@ h1,h2,h3,h4{
     <button class="mobile-close" id="mobileClose" aria-label="Fechar menu"><i class="fa-solid fa-xmark"></i></button>
   </div>
   <div class="mobile-nav-links">
-    <a href="#produtos" class="mobile-link">Cardápio</a>
+    <a href="cardapio.html" class="mobile-link">Cardápio</a>
     <a href="#experiencia" class="mobile-link">Experiência</a>
     <a href="#instagram" class="mobile-link">Instagram</a>
   </div>
@@ -915,16 +1074,16 @@ h1,h2,h3,h4{
 ================================================== -->
 <div class="marquee-strip" aria-hidden="true">
   <div class="marquee-track">
-    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
-    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
-    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
-    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
-    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
-    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
-    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
-    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
-    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
-    <span><i class="fa-solid fa-star"></i> MILKSHAKES</span>
+    <span>MILKSHAKERS</span>
+    <span>MILKSHAKERS</span>
+    <span>MILKSHAKERS</span>
+    <span>MILKSHAKERS</span>
+    <span>MILKSHAKERS</span>
+    <span>MILKSHAKERS</span>
+    <span>MILKSHAKERS</span>
+    <span>MILKSHAKERS</span>
+    <span>MILKSHAKERS</span>
+    <span>MILKSHAKERS</span>
   </div>
 </div>
  
@@ -968,93 +1127,137 @@ h1,h2,h3,h4{
 ================================================== -->
 <section class="produtos" id="produtos">
   <div class="container">
- 
+
     <div class="produtos-head">
       <div>
-        <span class="eyebrow"><span class="dot"></span> Cardápio</span>
-        <h2 class="section-title" style="margin-top:14px; color:var(--blue-deep);">O que te espera na MilkShakers</h2>
+        <span class="eyebrow"><span class="dot"></span> Uma amostra</span>
+        <h2 class="section-title" style="margin-top:14px; color:var(--blue-deep);">Um gostinho do que te espera</h2>
       </div>
+      <p class="section-lede">Alguns dos produtos que você encontra por aqui. O cardápio completo é bem maior: <strong>mais de 90 sabores de milkshake</strong>, açaí e muito mais.</p>
     </div>
- 
+
     <!-- MILKSHAKES — protagonista -->
     <div class="cat-heading">
-      <span class="cat-num">01</span>
+      <span class="cat-num"><i class="fa-solid fa-star"></i></span>
       <div>
         <h3>Milkshakes</h3>
-        <p>O motivo da loja existir</p>
+        <p>3 dos mais de 90 sabores disponíveis</p>
       </div>
     </div>
- 
+
     <div class="milkshake-grid">
-      <div class="shake-card">
+      <article class="shake-card">
+        <span class="shake-tag">Tradicional · nº 067</span>
         <img src="Images/milkshake-ovomaltine.png" alt="Milkshake de Ovomaltine" class="shake-photo">
         <h4>Ovomaltine</h4>
         <p>Cremoso, com o crocante e o sabor marcante de Ovomaltine.</p>
-      </div>
-      <div class="shake-card">
+        <div class="shake-foot">
+          <a href="cardapio.html#tradicionais">Ver tradicionais <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </article>
+      <article class="shake-card">
+        <span class="shake-tag">Especial · nº 236</span>
         <img src="Images/milkshake-chocrocante-branco.png" alt="Milkshake Chocrocante Branco" class="shake-photo">
         <h4>Chocrocante Branco</h4>
         <p>Chocolate branco cremoso com pedaços crocantes em cada colherada.</p>
-      </div>
-      <div class="shake-card">
+        <div class="shake-foot">
+          <a href="cardapio.html#especiais">Ver especiais <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </article>
+      <article class="shake-card">
+        <span class="shake-tag">Especial · nº 248</span>
         <img src="Images/milkshake-floresta-negra.png" alt="Milkshake Floresta Negra" class="shake-photo">
         <h4>Floresta Negra</h4>
         <p>Chocolate e cereja, finalizado com uma cereja no topo.</p>
-      </div>
+        <div class="shake-foot">
+          <a href="cardapio.html#especiais">Ver especiais <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </article>
     </div>
- 
-    <!-- COOKIES / QUICHES / CAFÉS — coadjuvantes -->
-    <div class="secondary-cats">
-      <div>
+
+    <!-- COOKIES / QUICHES / CAFÉS / BROWNIE -->
+    <div class="extras-head">
+      <h3>Pra acompanhar</h3>
+      <p>Cookies, quiches, cafés e brownie pra completar o pedido.</p>
+    </div>
+
+    <div class="extras">
+      <div class="extra-panel">
         <div class="cat-heading">
-          <span class="cat-num">02</span>
-          <div><h3>Cookies</h3><p>Quentinhos, na medida</p></div>
+          <span class="cat-num"><i class="fa-solid fa-cookie-bite"></i></span>
+          <div><h3>Cookies</h3></div>
         </div>
-        <!-- COMENTÁRIO: ajuste os nomes se quiser diferenciar melhor os 2 cookies -->
-        <div class="small-grid">
-          <div class="mini-card"><img src="Images/cookie-tradicional.png" alt="Cookie Tradicional" class="mini-thumb"><h5>Cookie Tradicional</h5><p>Feito na hora, sempre quentinho.</p></div>
-          <div class="mini-card"><img src="Images/cookie-nutella.png" alt="Cookie de Nutella" class="mini-thumb"><h5>Cookie Dark Nutella</h5><p>Coberto com uma camada generosa de Nutella.</p></div>
+        <div class="extra-item">
+          <img src="Images/cookie-tradicional.png" alt="Cookie Tradicional">
+          <div><h5>Cookie Tradicional</h5><p>Feito na hora, sempre quentinho.</p></div>
         </div>
-      </div>
- 
-      <div>
-        <div class="cat-heading">
-          <span class="cat-num">03</span>
-          <div><h3>Quiches</h3><p>Salgadas, feitas com carinho</p></div>
-        </div>
-        <div class="small-grid">
-          <div class="mini-card"><img src="Images/quiche-frango.png" alt="Quiche de Frango" class="mini-thumb"><h5>Quiche de Frango</h5><p>Nossa receita exclusiva, feita fresca todos os dias.</p></div>
-          <div class="mini-card"><img src="Images/quiche-calabresa.png" alt="Quiche de Calabresa" class="mini-thumb"><h5>Quiche de Calabresa</h5><p>Saborosa, feita fresca todos os dias.</p></div>
-        </div>
-      </div>
- 
-      <div>
-        <div class="cat-heading">
-          <span class="cat-num">04</span>
-          <div><h3>Cafés</h3><p>Pra fechar com chave de ouro</p></div>
-        </div>
-        <div class="small-grid">
-          <div class="mini-card"><img src="Images/cafe-tradicional.jpg" alt="Café MilkShakers" class="mini-thumb"><h5>Café</h5><p>Fresquinho, na medida certa.</p></div>
-          <div class="mini-card"><img src="Images/cafe-frappuccino.jpg" alt="Frappuccino" class="mini-thumb"><h5>Frappuccino Especial da Milk</h5><p>Gelado, batido e bem cremoso.</p></div>
+        <div class="extra-item">
+          <img src="Images/cookie-nutella.png" alt="Cookie Dark Nutella">
+          <div><h5>Cookie Dark Nutella</h5><p>Coberto com uma camada generosa de Nutella.</p></div>
         </div>
       </div>
 
-      <div>
+      <div class="extra-panel">
         <div class="cat-heading">
-          <span class="cat-num">05</span>
-          <div><h3>Brownie</h3><p>Denso e chocolatudo</p></div>
+          <span class="cat-num"><i class="fa-solid fa-bread-slice"></i></span>
+          <div><h3>Quiches</h3></div>
         </div>
-        <div class="mini-card">
-          <img src="Images/brownie.png" alt="Brownie" class="mini-thumb">
-          <h5>Brownie Tradicional</h5>
-          <p>Denso, chocolatudo, na medida certa.</p>
+        <div class="extra-item">
+          <img src="Images/quiche-frango.png" alt="Quiche de Frango">
+          <div><h5>Quiche de Frango</h5><p>Nossa receita exclusiva, feita fresca todos os dias.</p></div>
+        </div>
+        <div class="extra-item">
+          <img src="Images/quiche-calabresa.png" alt="Quiche de Calabresa">
+          <div><h5>Quiche de Calabresa</h5><p>Saborosa, feita fresca todos os dias.</p></div>
+        </div>
+      </div>
+
+      <div class="extra-panel">
+        <div class="cat-heading">
+          <span class="cat-num"><i class="fa-solid fa-mug-hot"></i></span>
+          <div><h3>Cafés</h3></div>
+        </div>
+        <div class="extra-item">
+          <img src="Images/cafe-tradicional.jpg" alt="Café MilkShakers">
+          <div><h5>Café</h5><p>Fresquinho, na medida certa.</p></div>
+        </div>
+        <div class="extra-item">
+          <img src="Images/cafe-frappuccino.jpg" alt="Frappuccino Especial da Milk">
+          <div><h5>Frappuccino Especial da Milk</h5><p>Gelado, batido e bem cremoso.</p></div>
+        </div>
+      </div>
+
+      <div class="extra-panel">
+        <div class="cat-heading">
+          <span class="cat-num"><i class="fa-solid fa-cookie"></i></span>
+          <div><h3>Brownie</h3></div>
+        </div>
+        <div class="extra-item">
+          <img src="Images/brownie.png" alt="Brownie Tradicional">
+          <div><h5>Brownie Tradicional</h5><p>Denso, chocolatudo, na medida certa.</p></div>
+        </div>
+      </div>
+
+      <div class="more-tile">
+        <h3>E tem muito mais!</h3>
+        <p>O que você viu aqui é só uma amostra. No <strong>cardápio completo</strong> tem milkshakes Tradicionais, Especiais, açaí com adicionais, Premium e outras delícias.</p>
+        <div class="more-actions">
+          <a href="cardapio.html" class="btn btn-primary">
+            Ver cardápio completo <i class="fa-solid fa-arrow-right"></i>
+          </a>
+          <div class="more-chips">
+            <a href="cardapio.html#tradicionais">Tradicionais</a>
+            <a href="cardapio.html#especiais">Especiais</a>
+            <a href="cardapio.html#acai">Açaí</a>
+            <a href="cardapio.html#premium">Premium</a>
+          </div>
         </div>
       </div>
     </div>
- 
+
   </div>
 </section>
- 
+
 <!-- ==================================================
      DESTAQUE / SPOTLIGHT
 ================================================== -->
@@ -1166,7 +1369,7 @@ h1,h2,h3,h4{
       <div class="footer-col">
         <h4>Navegação</h4>
         <ul>
-          <li><a href="#produtos">Cardápio</a></li>
+          <li><a href="cardapio.html">Cardápio</a></li>
           <li><a href="#experiencia">Experiência</a></li>
           <li><a href="#instagram">Instagram</a></li>
         </ul>
@@ -1213,7 +1416,7 @@ h1,h2,h3,h4{
   ------------------------------------------------ */
   const HERO_SLIDE_LINKS = {
     "1": "https://pedido.anota.ai/loja/milkshakers-1?f=msa",
-    "2": "#produtos",
+    "2": "cardapio.html",
     "3": "https://milkshakers.fidelimax.com.br/"
   };
  
@@ -1283,8 +1486,8 @@ h1,h2,h3,h4{
         if (HERO_SLIDE_LINKS[key]) {
           const url = HERO_SLIDE_LINKS[key];
           el.setAttribute("href", url);
-          // link interno (#seção) abre na mesma página; externo abre em nova aba
-          if (!url.startsWith("#")) {
+          // link do próprio site (#seção ou cardapio.html) abre na mesma aba; externo (https://...) abre em nova aba
+          if (/^https?:\/\//i.test(url)) {
             el.setAttribute("target", "_blank");
             el.setAttribute("rel", "noopener noreferrer");
           } else {
@@ -1308,38 +1511,211 @@ h1,h2,h3,h4{
         window.addEventListener("resize", () => setTimeout(syncHeroRatio, 150));
       }
 
-      const slides = heroCarousel.querySelectorAll(".hero-slide");
+      /* Capas lado a lado: trocam sozinhas e também dá para arrastar
+         com o mouse ou com o dedo. */
+      const slides = Array.from(heroCarousel.querySelectorAll(".hero-slide"));
       const dots = heroCarousel.querySelectorAll(".hero-dot");
+      const n = slides.length;
       const intervalMs = 5000; // tempo entre trocas automáticas
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const loop = n >= 3;     // com 3 ou mais capas, a última volta para a primeira sem "rebobinar"
       let current = 0;
       let timer = null;
+      let token = 0;           // invalida trocas pendentes quando o usuário mexe
+      let dragDX = 0;          // quanto já foi arrastado (px)
+
+      // onde cada capa fica em relação à atual: -1 (esquerda), 0 (na tela), 1 (direita)
+      const rel = (i) => {
+        let d = i - current;
+        if (loop) {
+          if (d > n / 2) d -= n;
+          else if (d < -n / 2) d += n;
+        }
+        return d;
+      };
+
+      const place = () => {
+        slides.forEach((s, i) => {
+          const d = rel(i);
+          // capa que atravessa de um lado ao outro (fora da tela) troca de lado sem animar
+          const salto = s._d !== undefined && Math.abs(d - s._d) > 1;
+          if (salto) s.style.transition = "none";
+          s.style.transform = "translate3d(calc(" + (d * 100) + "% + " + dragDX + "px),0,0)";
+          if (salto) { void s.offsetWidth; s.style.transition = ""; }
+          s._d = d;
+        });
+      };
+
+      // só a capa que está na tela entra na navegação por teclado / leitor de tela
+      const marcar = () => {
+        slides.forEach((s, i) => {
+          s.setAttribute("aria-hidden", i === current ? "false" : "true");
+          s.tabIndex = i === current ? 0 : -1;
+        });
+        dots.forEach((d, i) => d.classList.toggle("is-active", i === current));
+      };
+
+      const proximo  = () => loop ? (current + 1) % n : Math.min(current + 1, n - 1);
+      const anterior = () => loop ? (current - 1 + n) % n : Math.max(current - 1, 0);
 
       const goTo = (index) => {
+        token++;
         slides[current].classList.remove("is-active");
-        dots[current] && dots[current].classList.remove("is-active");
-        current = (index + slides.length) % slides.length;
+        current = (index + n) % n;
         slides[current].classList.add("is-active");
-        dots[current] && dots[current].classList.add("is-active");
+        marcar();
+        place();
+      };
+
+      // posição inicial, sem animação
+      heroCarousel.classList.add("hero-montando");
+      marcar();
+      place();
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        heroCarousel.classList.remove("hero-montando");
+      }));
+
+      const schedule = () => {
+        clearTimeout(timer);
+        timer = setTimeout(advance, intervalMs);
+      };
+
+      // só troca de capa quando a próxima imagem já carregou
+      // (evita mostrar um quadro azul vazio em conexão lenta)
+      const advance = () => {
+        const my = ++token;
+        const target = (current + 1) % n;
+        const img = slides[target].querySelector("img");
+        let done = false;
+        const go = () => {
+          if (done || my !== token) return;
+          done = true;
+          goTo(target);
+          schedule();
+        };
+        if (!img || img.complete) { go(); return; }
+        img.addEventListener("load", go, { once: true });
+        img.addEventListener("error", go, { once: true });
+        setTimeout(go, 4000); // não espera para sempre
       };
 
       const start = () => {
-        if (reduceMotion || slides.length < 2) return;
-        stop();
-        timer = setInterval(() => goTo(current + 1), intervalMs);
+        if (reduceMotion || n < 2) return;
+        schedule();
       };
       const stop = () => {
-        if (timer) { clearInterval(timer); timer = null; }
+        token++;
+        clearTimeout(timer);
+        timer = null;
       };
 
       dots.forEach((dot, i) => {
         dot.addEventListener("click", () => { goTo(i); start(); });
       });
 
-      heroCarousel.addEventListener("mouseenter", stop);
-      heroCarousel.addEventListener("mouseleave", start);
-      heroCarousel.addEventListener("focusin", stop);
+      /* ---------- arrastar com o mouse ou com o dedo ---------- */
+      let pid = null;            // qual dedo/mouse está arrastando
+      let x0 = 0, y0 = 0;        // onde começou
+      let xAnt = 0, tAnt = 0, vx = 0;   // velocidade (px/ms), para o "empurrão"
+      let larg = 1;              // largura da hero
+      let decidido = false;      // já deu para saber se é horizontal ou vertical?
+      let arrastando = false;
+      let bloqueiaClique = false;
+
+      // nas pontas (só com 2 capas) o arrasto "resiste"
+      const limite = (dx) => {
+        const fora = !loop && ((dx < 0 && current === n - 1) || (dx > 0 && current === 0));
+        return fora ? dx * 0.3 : Math.max(-larg, Math.min(larg, dx));
+      };
+
+      heroCarousel.addEventListener("pointerdown", (e) => {
+        if (n < 2) return;
+        if (e.pointerType === "mouse" && e.button !== 0) return;
+        if (e.target.closest && e.target.closest(".hero-dots")) return;
+        pid = e.pointerId;
+        x0 = xAnt = e.clientX;
+        y0 = e.clientY;
+        tAnt = performance.now();
+        vx = 0;
+        decidido = false;
+        arrastando = false;
+        larg = heroCarousel.clientWidth || 1;
+      });
+
+      heroCarousel.addEventListener("pointermove", (e) => {
+        if (e.pointerId !== pid) return;
+        if (e.pointerType === "mouse" && e.buttons === 0) { fim(e); return; }  // soltou fora da janela
+        const dx = e.clientX - x0;
+        const dy = e.clientY - y0;
+        if (!decidido) {
+          if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;     // ainda é só um toque/clique
+          decidido = true;
+          if (Math.abs(dy) > Math.abs(dx)) { pid = null; return; }   // vertical: deixa a página rolar
+          arrastando = true;
+          heroCarousel.classList.add("is-dragging");
+          try { heroCarousel.setPointerCapture(e.pointerId); } catch (_) {}
+          stop();                                               // pausa a troca automática
+        }
+        if (!arrastando) return;
+        const agora = performance.now();
+        vx = (e.clientX - xAnt) / Math.max(1, agora - tAnt);
+        xAnt = e.clientX;
+        tAnt = agora;
+        dragDX = limite(dx);
+        place();
+      });
+
+      function fim(e) {
+        if (e.pointerId !== pid) return;
+        pid = null;
+        if (!arrastando) return;
+        arrastando = false;
+        heroCarousel.classList.remove("is-dragging");
+        try { heroCarousel.releasePointerCapture(e.pointerId); } catch (_) {}
+        const dx = dragDX;
+        dragDX = 0;
+        const limiar = Math.min(90, larg * 0.18);               // quanto precisa arrastar para trocar
+        // "empurrão": arrasto curto, mas rápido e sem parar antes de soltar
+        const parado = performance.now() - tAnt > 90;
+        const rapido = !parado && Math.abs(vx) > 0.3 && Math.abs(dx) > 18 && (vx < 0) === (dx < 0);
+        let alvo = current;
+        if (e.type !== "pointercancel") {
+          if (dx <= -limiar || (rapido && dx < 0)) alvo = proximo();
+          else if (dx >= limiar || (rapido && dx > 0)) alvo = anterior();
+        }
+        // depois de arrastar, o "clique" que o navegador dispara não pode abrir o link
+        bloqueiaClique = true;
+        setTimeout(() => { bloqueiaClique = false; }, 150);
+        goTo(alvo);          // se não passou do limiar, a capa volta para o lugar
+        start();
+      }
+      heroCarousel.addEventListener("pointerup", fim);
+      heroCarousel.addEventListener("pointercancel", fim);
+
+      heroCarousel.addEventListener("click", (e) => {
+        if (bloqueiaClique) { e.preventDefault(); e.stopPropagation(); }
+      }, true);
+      // impede o "arrastar link/imagem" nativo do navegador (o fantasminha)
+      heroCarousel.addEventListener("dragstart", (e) => e.preventDefault());
+
+      // teclado: setas esquerda/direita trocam a capa
+      heroCarousel.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") { goTo(proximo()); if (timer) schedule(); }
+        else if (e.key === "ArrowLeft") { goTo(anterior()); if (timer) schedule(); }
+      });
+
+      // pausa só quando alguém navega pelo teclado nas bolinhas.
+      // (Antes, passar o mouse ou clicar/tocar no slide pausava e podia
+      // nunca mais voltar — principalmente no celular e ao abrir o link.)
+      heroCarousel.addEventListener("focusin", (e) => {
+        try { if (e.target.matches(":focus-visible")) stop(); } catch (_) {}
+      });
       heroCarousel.addEventListener("focusout", start);
+
+      // aba escondida: pausa; ao voltar, retoma
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) stop(); else start();
+      });
 
       start();
     }
