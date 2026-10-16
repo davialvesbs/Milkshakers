@@ -27,6 +27,7 @@
    (edite aqui para ajustar a identidade visual inteira)
 ================================================== */
 :root{
+  --header-h: 116px; /* altura real do cabeçalho fixo (logo de 150px + respiro) */
   --blue:        #0164fd;
   --blue-dark:   #003caa;
   --blue-deep:   #004bbd;
@@ -248,7 +249,7 @@ p, .section-lede{
 ================================================== */
 .hero{
   position:relative;
-  padding-top: 84px; /* espaço para o cabeçalho fixo não cobrir a arte */
+  padding-top: var(--header-h); /* espaço para o cabeçalho fixo não cobrir a arte */
   overflow:hidden;
 }
 .hero-carousel{
@@ -256,9 +257,9 @@ p, .section-lede{
   width:100%;
   /* proporção real da arte de desktop: 1180 x 620 */
   aspect-ratio: 1180 / 620;
-  /* nunca passa da altura da tela: desconta header (84px) + faixa marquee (~56px) */
-  max-height: calc(100vh - 84px - 56px);
-  max-height: calc(100svh - 84px - 56px);
+  /* nunca passa da altura da tela: desconta o cabeçalho + faixa marquee (~56px) */
+  max-height: calc(100vh - var(--header-h) - 56px);
+  max-height: calc(100svh - var(--header-h) - 56px);
   min-height: 360px;
   margin-inline: auto;
   background: #0a5cff;
@@ -308,7 +309,7 @@ p, .section-lede{
     /* PLACEHOLDER: troque pela proporção real da sua arte mobile
        quando ela estiver definida (ex.: 1080/1350 para 4:5) */
     aspect-ratio: 4 / 5;
-    max-height: calc(100svh - 84px - 56px);
+    max-height: calc(100svh - var(--header-h) - 56px);
     min-height: 0;
   }
 }
