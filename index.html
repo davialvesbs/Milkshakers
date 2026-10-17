@@ -250,6 +250,7 @@ p, .section-lede{
 .hero{
   position:relative;
   padding-top: var(--header-h); /* espaço para o cabeçalho fixo não cobrir a arte */
+  background: #004ABB; /* mesma cor do cabeçalho: some a linha clara entre os dois */
   overflow:hidden;
 }
 .hero-carousel{
@@ -257,9 +258,9 @@ p, .section-lede{
   width:100%;
   /* proporção real da arte de desktop: 1180 x 620 */
   aspect-ratio: 1180 / 620;
-  /* nunca passa da altura da tela: desconta o cabeçalho + faixa marquee (~56px) */
-  max-height: calc(100vh - var(--header-h) - 56px);
-  max-height: calc(100svh - var(--header-h) - 56px);
+  /* arte de ponta a ponta: só limita a altura em telas grandes (nunca menos de 560px, então em telas baixas a hero pode passar um pouco da tela) */
+  max-height: max(calc(100vh - var(--header-h)), 560px);
+  max-height: max(calc(100svh - var(--header-h)), 560px);
   min-height: 360px;
   margin-inline: auto;
   background: #0a5cff;
